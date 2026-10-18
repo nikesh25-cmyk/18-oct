@@ -30,6 +30,19 @@ class ExportCityTests(unittest.TestCase):
         self.assertEqual(report["unresolved_saved_groups"], ["old-road"])
         self.assertEqual(report["missing_application_groups"], [])
 
+    def test_recovers_saved_orphan_from_pinned_legacy_manifest(self):
+        legacy = self.root / "legacy.json"
+        legacy.write_text(json.dumps({"site": "Harr", "groups": [
+            {"id": "old-road", "ops": [{"op": "fill", "from": [0, 0, 0],
+                "to": [0, 0, 0], "kind": "Rock", "rgb": [1, 2, 3]}]}
+        ]}))
+        package, report = export_city(self.manifest, self.record, legacy)
+        self.assertEqual(len(package["groups"]), 2)
+        self.assertEqual(package["groups"][1]["anchor"], [15, 5])
+        self.assertEqual(package["groups"][1]["provenance"], "legacy-saved")
+        self.assertEqual(report["recovered_legacy_groups"], ["old-road"])
+        self.assertEqual(report["unresolved_saved_groups"], [])
+
     def test_duplicate_id_refused(self):
         data = json.loads(self.manifest.read_text())
         data["groups"].append(data["groups"][0])

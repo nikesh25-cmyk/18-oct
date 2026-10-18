@@ -53,7 +53,7 @@ Status codes: **S** = source code/content found at pinned revision; **P** = prod
 
 The private archive contains 118 members including `data/world.sqlite`, `data/veloren-link.sqlite`, and `userdata/server/saves/db.sqlite`; no private table rows have been exported. A protected temporary copy yielded [schema names and columns](database-schema-inventory.json): 75 NemoWorld tables, 43 link tables and 13 Veloren save tables. Aggregate row counts are kept outside the repository. Next: map every table and WAL-backed save field into destination contracts, then run a dry import into an empty destination. The existing archive is never modified.
 
-The installed Veloren world record names **387 applied city groups**, while the current combined manifest has **362** groups. All 362 current groups appear in the record; 25 older road/light groups remain in saved state but are absent from that manifest. The importer must preserve those 25 as existing-world geometry or explicitly reconcile them with an earlier manifest. Silently rendering only current authored content would lose part of the owner's saved city.
+The installed Veloren world record names **387 applied city groups**, while the current combined manifest has **362** groups. All 362 current groups appear in the record. The other 25 were recovered by exact ID from pinned historical Harr manifest revision `616a0a868e` and placed with the saved record; the export report now shows zero unresolved saved groups. The historical manifest digest and `legacy-saved` provenance are in the exported package. This recovers authored geometry, but a Unity visual check and source-to-save geometry digest comparison remain pending.
 
 ## Current completion status
 

@@ -66,7 +66,7 @@ def validate_op(op):
     return op
 
 
-def export_city(manifest_path, record_path):
+def export_city(manifest_path, record_path, legacy_path=None):
     manifest = load(manifest_path)
     record = load(record_path)
     if manifest.get("site") != "Harr" or record.get("site") != "Harr":
@@ -102,6 +102,30 @@ def export_city(manifest_path, record_path):
             "digest": placement.get("digest", ""),
             "ops": [validate_op(op) for op in ops],
         })
+    recovered = []
+    if legacy_path is not None:
+        legacy = load(legacy_path)
+        if legacy.get("site") != "Harr" or not isinstance(legacy.get("groups"), list):
+            raise ExportError("invalid legacy manifest")
+        legacy_seen = set()
+        for group in legacy["groups"]:
+            name = group.get("id") if isinstance(group, dict) else None
+            if not isinstance(name, str) or not name or name in legacy_seen:
+                raise ExportError("invalid or duplicate legacy group")
+            legacy_seen.add(name)
+            if name in seen or name not in applied:
+                continue
+            placement = applied[name]
+            anchor = point(placement.get("anchor"), 2, f"legacy anchor of {name}")
+            ground = placement.get("ground")
+            ops = group.get("ops")
+            if type(ground) is not int or not isinstance(ops, list) or len(ops) > 1000:
+                raise ExportError(f"invalid legacy group: {name}")
+            groups.append({"id": name, "anchor": [anchor[0] - origin[0], anchor[1] - origin[1]],
+                           "ground": ground, "digest": placement.get("digest", ""),
+                           "provenance": "legacy-saved", "ops": [validate_op(op) for op in ops]})
+            recovered.append(name)
+            seen.add(name)
     unresolved = sorted(set(applied) - seen)
     package = {
         "format": "harr-unity-city-v1",
@@ -110,6 +134,7 @@ def export_city(manifest_path, record_path):
         "ground_reference": min(group["ground"] for group in groups) if groups else 0,
         "source_manifest_sha256": sha(manifest_path),
         "saved_record_sha256": sha(record_path),
+        "legacy_manifest_sha256": sha(legacy_path) if legacy_path is not None else None,
         "groups": groups,
     }
     report = {
@@ -118,6 +143,7 @@ def export_city(manifest_path, record_path):
         "authored_ops": sum(len(group["ops"]) for group in groups),
         "saved_groups": len(applied),
         "unresolved_saved_groups": unresolved,
+        "recovered_legacy_groups": sorted(recovered),
         "missing_application_groups": [],
         "source_manifest_sha256": package["source_manifest_sha256"],
         "saved_record_sha256": package["saved_record_sha256"],
@@ -140,8 +166,8 @@ def write_json_atomic(value, path):
             temporary.unlink()
 
 
-def write_city(manifest, record, output, report_path):
-    package, report = export_city(manifest, record)
+def write_city(manifest, record, output, report_path, legacy=None):
+    package, report = export_city(manifest, record, legacy)
     write_json_atomic(package, output)
     write_json_atomic(report, report_path)
     return report
@@ -153,9 +179,10 @@ def main():
     parser.add_argument("--world-record", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--report", type=Path, required=True)
+    parser.add_argument("--legacy-manifest", type=Path)
     args = parser.parse_args()
     try:
-        report = write_city(args.manifest, args.world_record, args.output, args.report)
+        report = write_city(args.manifest, args.world_record, args.output, args.report, args.legacy_manifest)
     except ExportError as error:
         parser.exit(1, f"city export failed: {error}\n")
     print(f"Exported {report['authored_groups']} groups; {len(report['unresolved_saved_groups'])} saved groups unresolved")

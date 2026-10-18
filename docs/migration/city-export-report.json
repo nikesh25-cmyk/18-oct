@@ -1,9 +1,10 @@
 {
   "format": "harr-unity-city-export-report-v1",
-  "authored_groups": 362,
-  "authored_ops": 3805,
+  "authored_groups": 387,
+  "authored_ops": 3975,
   "saved_groups": 387,
-  "unresolved_saved_groups": [
+  "unresolved_saved_groups": [],
+  "recovered_legacy_groups": [
     "lights-avenue-west-1",
     "lights-avenue-west-2",
     "lights-east-lane-2",
