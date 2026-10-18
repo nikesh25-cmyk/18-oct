@@ -1,0 +1,1653 @@
+{
+  "format": "nemoworld-private-schema-inventory-v1",
+  "archive_sha256": "901666d568a21488c5680a6b61c434d05eb677728974574e6d56302ce044aec3",
+  "databases": {
+    "data/world.sqlite": {
+      "tables": [
+        {
+          "name": "accounts",
+          "columns": [
+            "id",
+            "name",
+            "email",
+            "password",
+            "role",
+            "status",
+            "consent_at",
+            "created_at"
+          ]
+        },
+        {
+          "name": "adoptions",
+          "columns": [
+            "id",
+            "submission_id",
+            "owner_id",
+            "note",
+            "created_at"
+          ]
+        },
+        {
+          "name": "agents",
+          "columns": [
+            "id",
+            "operator_id",
+            "name",
+            "color",
+            "symbol",
+            "capabilities",
+            "limitations",
+            "status",
+            "verified",
+            "x",
+            "y",
+            "last_seen",
+            "last_move",
+            "last_message",
+            "created_at",
+            "world_id",
+            "posture",
+            "emote",
+            "emote_until",
+            "last_emote",
+            "region_id",
+            "country",
+            "kind",
+            "z",
+            "grounded",
+            "yaw",
+            "pitch",
+            "last_look"
+          ]
+        },
+        {
+          "name": "ambassador_conversations",
+          "columns": [
+            "id",
+            "account_id",
+            "ambassador_id",
+            "question",
+            "answer",
+            "created_at",
+            "mode",
+            "country_context",
+            "source_numbers"
+          ]
+        },
+        {
+          "name": "ambassador_legacy_map",
+          "columns": [
+            "guide_id",
+            "region_id",
+            "ambassador_id",
+            "created_at"
+          ]
+        },
+        {
+          "name": "appeals",
+          "columns": [
+            "id",
+            "report_id",
+            "account_id",
+            "reason",
+            "status",
+            "decision",
+            "reviewer_id",
+            "created_at"
+          ]
+        },
+        {
+          "name": "audit",
+          "columns": [
+            "seq",
+            "actor",
+            "event",
+            "record_id",
+            "created_at",
+            "previous_hash",
+            "hash"
+          ]
+        },
+        {
+          "name": "calling_receipts",
+          "columns": [
+            "id",
+            "agent_id",
+            "account_id",
+            "calling_id",
+            "objective_id",
+            "source_kind",
+            "source_id",
+            "source_at",
+            "selected_at",
+            "earned_day",
+            "points",
+            "created_at",
+            "proof_hash"
+          ]
+        },
+        {
+          "name": "claim_drafts",
+          "columns": [
+            "claim_id",
+            "content",
+            "revision",
+            "updated_at",
+            "updated_ms",
+            "archived",
+            "resumed_from"
+          ]
+        },
+        {
+          "name": "claims",
+          "columns": [
+            "id",
+            "task_id",
+            "task_version",
+            "account_id",
+            "agent_id",
+            "status",
+            "expires_at",
+            "idempotency_key",
+            "created_at"
+          ]
+        },
+        {
+          "name": "coin_rewards",
+          "columns": [
+            "seq",
+            "id",
+            "agent_id",
+            "account_id",
+            "task_id",
+            "submission_id",
+            "review_id",
+            "fingerprint",
+            "amount",
+            "policy_version",
+            "award_day",
+            "created_at",
+            "previous_hash",
+            "hash"
+          ]
+        },
+        {
+          "name": "community_circles",
+          "columns": [
+            "id",
+            "name",
+            "summary",
+            "focus",
+            "creator_agent_id",
+            "status",
+            "created_at",
+            "management_reason"
+          ]
+        },
+        {
+          "name": "community_events",
+          "columns": [
+            "id",
+            "circle_id",
+            "title",
+            "summary",
+            "creator_agent_id",
+            "world_id",
+            "starts_at",
+            "ends_at",
+            "capacity",
+            "status",
+            "created_at",
+            "management_reason"
+          ]
+        },
+        {
+          "name": "community_members",
+          "columns": [
+            "circle_id",
+            "agent_id",
+            "joined_at"
+          ]
+        },
+        {
+          "name": "community_pledges",
+          "columns": [
+            "project_id",
+            "agent_id",
+            "commitment",
+            "created_at"
+          ]
+        },
+        {
+          "name": "community_projects",
+          "columns": [
+            "id",
+            "circle_id",
+            "title",
+            "summary",
+            "goal",
+            "evidence_requirements",
+            "creator_agent_id",
+            "milestones",
+            "status",
+            "created_at",
+            "management_reason"
+          ]
+        },
+        {
+          "name": "community_rsvps",
+          "columns": [
+            "event_id",
+            "agent_id",
+            "created_at"
+          ]
+        },
+        {
+          "name": "community_thanks",
+          "columns": [
+            "id",
+            "giver_account_id",
+            "giver_agent_id",
+            "recipient_agent_id",
+            "day",
+            "reason",
+            "created_at"
+          ]
+        },
+        {
+          "name": "evidence_captures",
+          "columns": [
+            "id",
+            "source_id",
+            "source_key",
+            "url",
+            "sha256",
+            "bytes",
+            "retained",
+            "retained_path",
+            "retrieved_at",
+            "declared_date",
+            "unit",
+            "title",
+            "locator",
+            "evidence_kind",
+            "provenance",
+            "license_name",
+            "license_url",
+            "license_attribution",
+            "excerpt",
+            "origin",
+            "supersedes",
+            "created_at"
+          ]
+        },
+        {
+          "name": "evidence_events",
+          "columns": [
+            "id",
+            "source_id",
+            "kind",
+            "detail",
+            "created_at"
+          ]
+        },
+        {
+          "name": "evidence_sources",
+          "columns": [
+            "id",
+            "source_key",
+            "url",
+            "host",
+            "path",
+            "status",
+            "withdrawn_reason",
+            "created_at"
+          ]
+        },
+        {
+          "name": "frontier_actions",
+          "columns": [
+            "id",
+            "account_id",
+            "agent_id",
+            "world_id",
+            "action",
+            "created_at"
+          ]
+        },
+        {
+          "name": "frontier_blocks",
+          "columns": [
+            "id",
+            "world_id",
+            "x",
+            "y",
+            "z",
+            "type",
+            "creator_agent_id",
+            "creator_account_id",
+            "created_at",
+            "plot_id",
+            "grant_id"
+          ]
+        },
+        {
+          "name": "frontier_sectors",
+          "columns": [
+            "world_id",
+            "sector_x",
+            "sector_y",
+            "creator_account_id",
+            "creator_agent_id",
+            "created_at"
+          ]
+        },
+        {
+          "name": "guild_contributions",
+          "columns": [
+            "id",
+            "project_id",
+            "workstream_id",
+            "agent_id",
+            "account_id",
+            "commitment",
+            "evidence",
+            "sources",
+            "status",
+            "review_note",
+            "submitted_at",
+            "verified_by_agent_id",
+            "verified_by_account_id",
+            "verified_at",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "name": "guild_participants",
+          "columns": [
+            "project_id",
+            "agent_id",
+            "role",
+            "state",
+            "joined_at",
+            "updated_at"
+          ]
+        },
+        {
+          "name": "guild_projects",
+          "columns": [
+            "id",
+            "guild_id",
+            "title",
+            "summary",
+            "plan",
+            "visibility",
+            "status",
+            "creator_agent_id",
+            "created_at",
+            "management_reason"
+          ]
+        },
+        {
+          "name": "invites",
+          "columns": [
+            "code_hash",
+            "role",
+            "expires_at",
+            "used_by"
+          ]
+        },
+        {
+          "name": "jobs",
+          "columns": [
+            "id",
+            "agent_id",
+            "status",
+            "detail",
+            "created_at"
+          ]
+        },
+        {
+          "name": "journey_crops",
+          "columns": [
+            "agent_id",
+            "x",
+            "y",
+            "kind",
+            "planted_at",
+            "tended_at",
+            "harvested_at"
+          ]
+        },
+        {
+          "name": "journey_inventory",
+          "columns": [
+            "agent_id",
+            "kind",
+            "quantity"
+          ]
+        },
+        {
+          "name": "journey_journal",
+          "columns": [
+            "id",
+            "agent_id",
+            "text",
+            "created_at"
+          ]
+        },
+        {
+          "name": "journey_profiles",
+          "columns": [
+            "agent_id",
+            "bio",
+            "purpose",
+            "title",
+            "avatar",
+            "harvests",
+            "crafts"
+          ]
+        },
+        {
+          "name": "journey_visits",
+          "columns": [
+            "agent_id",
+            "world_id",
+            "visited_at"
+          ]
+        },
+        {
+          "name": "karma_purchases",
+          "columns": [
+            "seq",
+            "id",
+            "account_id",
+            "agent_id",
+            "good_id",
+            "amount",
+            "balance_after",
+            "policy_version",
+            "idempotency_key",
+            "fingerprint",
+            "created_at",
+            "previous_hash",
+            "hash"
+          ]
+        },
+        {
+          "name": "karma_receipts",
+          "columns": [
+            "seq",
+            "id",
+            "agent_id",
+            "account_id",
+            "service_id",
+            "tier",
+            "source_kind",
+            "source_id",
+            "source_at",
+            "amount",
+            "per_day",
+            "requires_other_operator",
+            "award_day",
+            "policy_version",
+            "created_at",
+            "previous_hash",
+            "hash"
+          ]
+        },
+        {
+          "name": "land_events",
+          "columns": [
+            "id",
+            "plot_id",
+            "account_id",
+            "action",
+            "purpose",
+            "description",
+            "created_at"
+          ]
+        },
+        {
+          "name": "land_parcels",
+          "columns": [
+            "id",
+            "world_id",
+            "sector_x",
+            "sector_y",
+            "plot_x",
+            "plot_y",
+            "x",
+            "y",
+            "width",
+            "height",
+            "area_m2",
+            "buildable_cells",
+            "reserved",
+            "reserved_reason"
+          ]
+        },
+        {
+          "name": "land_stewardships",
+          "columns": [
+            "plot_id",
+            "account_id",
+            "purpose",
+            "description",
+            "assigned_at"
+          ]
+        },
+        {
+          "name": "mayor_conversations",
+          "columns": [
+            "id",
+            "account_id",
+            "npc_id",
+            "question",
+            "answer",
+            "created_at",
+            "mode",
+            "country_context",
+            "source_numbers"
+          ]
+        },
+        {
+          "name": "messages",
+          "columns": [
+            "id",
+            "agent_id",
+            "account_id",
+            "channel",
+            "mission_id",
+            "recipients",
+            "text",
+            "status",
+            "created_at",
+            "world_id"
+          ]
+        },
+        {
+          "name": "missions",
+          "columns": [
+            "id",
+            "title",
+            "area",
+            "summary",
+            "owner_id",
+            "beneficiary",
+            "reviewer_id",
+            "rubric",
+            "status",
+            "demo",
+            "created_at"
+          ]
+        },
+        {
+          "name": "npc_ambassadors",
+          "columns": [
+            "id",
+            "iso2",
+            "iso3",
+            "m49",
+            "name",
+            "region",
+            "subregion",
+            "ldc",
+            "lldc",
+            "sids",
+            "world_id",
+            "sprite",
+            "x",
+            "y",
+            "direction",
+            "status",
+            "created_at"
+          ]
+        },
+        {
+          "name": "npc_mayors",
+          "columns": [
+            "id",
+            "region_id",
+            "world_id",
+            "name",
+            "sprite",
+            "x",
+            "y",
+            "direction",
+            "status",
+            "ticks",
+            "last_tick"
+          ]
+        },
+        {
+          "name": "plot_grant_events",
+          "columns": [
+            "id",
+            "grant_id",
+            "plot_id",
+            "account_id",
+            "action",
+            "detail",
+            "created_at"
+          ]
+        },
+        {
+          "name": "plot_grants",
+          "columns": [
+            "id",
+            "plot_id",
+            "steward_account_id",
+            "guest_account_id",
+            "guest_agent_id",
+            "purpose",
+            "scope",
+            "expires_at",
+            "created_at",
+            "revoked_at",
+            "revoked_by",
+            "uses",
+            "last_used_at",
+            "status"
+          ]
+        },
+        {
+          "name": "quest_chains",
+          "columns": [
+            "id",
+            "slug",
+            "title",
+            "route",
+            "summary",
+            "narrative",
+            "origin",
+            "author_account_id",
+            "status",
+            "practice",
+            "beneficiary",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "name": "quest_enrollments",
+          "columns": [
+            "id",
+            "agent_id",
+            "account_id",
+            "chain_id",
+            "started_at",
+            "idempotency_key",
+            "created_at"
+          ]
+        },
+        {
+          "name": "quest_steps",
+          "columns": [
+            "id",
+            "chain_id",
+            "ordinal",
+            "slug",
+            "title",
+            "instructions",
+            "output_name",
+            "source_kind",
+            "requires_review",
+            "target",
+            "prerequisite_step_id",
+            "created_at"
+          ]
+        },
+        {
+          "name": "reports",
+          "columns": [
+            "id",
+            "reporter_id",
+            "target_type",
+            "target_id",
+            "reason",
+            "status",
+            "resolution",
+            "moderator_id",
+            "created_at"
+          ]
+        },
+        {
+          "name": "research_lead_consolidations",
+          "columns": [
+            "dedupe_key",
+            "country_code",
+            "canonical_id",
+            "consolidated_id",
+            "reason",
+            "created_at"
+          ]
+        },
+        {
+          "name": "research_lead_versions",
+          "columns": [
+            "id",
+            "lead_id",
+            "revision",
+            "title",
+            "instructions",
+            "rubric",
+            "source_urls",
+            "substantive_key",
+            "revision_reason",
+            "created_at"
+          ]
+        },
+        {
+          "name": "research_leads",
+          "columns": [
+            "id",
+            "country_code",
+            "goal",
+            "stage",
+            "title",
+            "instructions",
+            "rubric",
+            "source_urls",
+            "status",
+            "mission_id",
+            "task_id",
+            "created_at"
+          ]
+        },
+        {
+          "name": "resident_callings",
+          "columns": [
+            "agent_id",
+            "calling_id",
+            "selected_at",
+            "last_changed_day"
+          ]
+        },
+        {
+          "name": "resident_memory",
+          "columns": [
+            "id",
+            "agent_id",
+            "account_id",
+            "kind",
+            "attribute",
+            "subject",
+            "value",
+            "source_kind",
+            "source_id",
+            "source_at",
+            "source_label",
+            "origin",
+            "state",
+            "decided_by",
+            "decided_at",
+            "supersedes",
+            "superseded_by",
+            "proof_hash",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "name": "resident_runs",
+          "columns": [
+            "id",
+            "account_id",
+            "agent_id",
+            "permission",
+            "status",
+            "phase",
+            "interrupted",
+            "stop_reason",
+            "decision",
+            "decision_budget",
+            "model_calls",
+            "action_count",
+            "failed_calls",
+            "failed_actions",
+            "last_action",
+            "pending_action",
+            "credential_hash",
+            "minutes",
+            "resumed_from",
+            "started_at",
+            "updated_at"
+          ]
+        },
+        {
+          "name": "resident_vault",
+          "columns": [
+            "id",
+            "agent_id",
+            "account_id",
+            "slot",
+            "version",
+            "nonce",
+            "ciphertext",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "name": "resident_vault_keys",
+          "columns": [
+            "agent_id",
+            "account_id",
+            "mode",
+            "wrapped_key",
+            "key_check",
+            "created_at",
+            "updated_at"
+          ]
+        },
+        {
+          "name": "resource_offer_events",
+          "columns": [
+            "id",
+            "offer_id",
+            "account_id",
+            "action",
+            "detail",
+            "created_at"
+          ]
+        },
+        {
+          "name": "resource_offers",
+          "columns": [
+            "id",
+            "offerer_agent_id",
+            "offerer_account_id",
+            "recipient_agent_id",
+            "recipient_account_id",
+            "items",
+            "note",
+            "status",
+            "propose_key",
+            "accept_key",
+            "proposed_at",
+            "expires_at",
+            "settled_at",
+            "settled_by_account_id"
+          ]
+        },
+        {
+          "name": "reviews",
+          "columns": [
+            "id",
+            "submission_id",
+            "reviewer_id",
+            "decision",
+            "reason",
+            "created_at"
+          ]
+        },
+        {
+          "name": "settings",
+          "columns": [
+            "key",
+            "value"
+          ]
+        },
+        {
+          "name": "shop_purchases",
+          "columns": [
+            "id",
+            "account_id",
+            "agent_id",
+            "good_id",
+            "category",
+            "price",
+            "granted",
+            "world_id",
+            "karma_receipt_id",
+            "balance_after",
+            "key",
+            "day",
+            "created_at"
+          ]
+        },
+        {
+          "name": "submission_evidence",
+          "columns": [
+            "submission_id",
+            "source_number",
+            "capture_id",
+            "url",
+            "locator",
+            "cited_date",
+            "state",
+            "created_at"
+          ]
+        },
+        {
+          "name": "submissions",
+          "columns": [
+            "id",
+            "claim_id",
+            "version",
+            "artifact",
+            "sources",
+            "method",
+            "limitations",
+            "rights",
+            "status",
+            "idempotency_key",
+            "created_at"
+          ]
+        },
+        {
+          "name": "task_followups",
+          "columns": [
+            "task_id",
+            "submission_id",
+            "creator_id",
+            "idempotency_key",
+            "fingerprint",
+            "created_at"
+          ]
+        },
+        {
+          "name": "tasks",
+          "columns": [
+            "id",
+            "mission_id",
+            "title",
+            "instructions",
+            "rights",
+            "allowed_domains",
+            "version",
+            "status"
+          ]
+        },
+        {
+          "name": "tokens",
+          "columns": [
+            "hash",
+            "account_id",
+            "agent_id",
+            "kind",
+            "expires_at",
+            "max_calls",
+            "used_calls",
+            "scopes",
+            "revoked"
+          ]
+        },
+        {
+          "name": "trade_claim_units",
+          "columns": [
+            "claim_id",
+            "kind",
+            "quantity"
+          ]
+        },
+        {
+          "name": "trade_claims",
+          "columns": [
+            "id",
+            "listing_id",
+            "claimer_agent_id",
+            "claimer_account_id",
+            "claim_key",
+            "claimed_at"
+          ]
+        },
+        {
+          "name": "trade_events",
+          "columns": [
+            "id",
+            "listing_id",
+            "account_id",
+            "action",
+            "detail",
+            "created_at"
+          ]
+        },
+        {
+          "name": "trade_listings",
+          "columns": [
+            "id",
+            "poster_agent_id",
+            "poster_account_id",
+            "items",
+            "note",
+            "status",
+            "post_key",
+            "posted_at",
+            "expires_at",
+            "settled_at",
+            "returned"
+          ]
+        },
+        {
+          "name": "trade_terms",
+          "columns": [
+            "listing_id",
+            "kind",
+            "offered",
+            "taken"
+          ]
+        },
+        {
+          "name": "world_objects",
+          "columns": [
+            "id",
+            "world_id",
+            "type",
+            "x",
+            "y",
+            "created_at"
+          ]
+        },
+        {
+          "name": "worlds",
+          "columns": [
+            "id",
+            "name",
+            "kind",
+            "owner_agent_id",
+            "visibility",
+            "width",
+            "height",
+            "created_at"
+          ]
+        }
+      ]
+    },
+    "data/veloren-link.sqlite": {
+      "tables": [
+        {
+          "name": "announcements",
+          "columns": [
+            "id",
+            "resident_id",
+            "player_uuid",
+            "text",
+            "created_at",
+            "delivered_at"
+          ]
+        },
+        {
+          "name": "atlas_asks",
+          "columns": [
+            "player_uuid",
+            "last_at"
+          ]
+        },
+        {
+          "name": "atlas_commands",
+          "columns": [
+            "cmd_id",
+            "kind",
+            "player_uuid",
+            "place_id",
+            "issued_at",
+            "expires_at"
+          ]
+        },
+        {
+          "name": "atlas_notices",
+          "columns": [
+            "id",
+            "player_uuid",
+            "text",
+            "created_at",
+            "expires_at",
+            "delivered_at",
+            "dedupe"
+          ]
+        },
+        {
+          "name": "city_assessments",
+          "columns": [
+            "job_id",
+            "citizen_id",
+            "level",
+            "exercise",
+            "answer",
+            "expected",
+            "sources",
+            "passed",
+            "sim_ms"
+          ]
+        },
+        {
+          "name": "city_attendance",
+          "columns": [
+            "job_id",
+            "citizen_id",
+            "venue",
+            "sim_ms"
+          ]
+        },
+        {
+          "name": "city_births",
+          "columns": [
+            "citizen_id",
+            "household_id",
+            "kind",
+            "home_group",
+            "source",
+            "sim_ms"
+          ]
+        },
+        {
+          "name": "city_citizens",
+          "columns": [
+            "id",
+            "name",
+            "stage",
+            "role",
+            "household_id",
+            "admitted_sim_ms",
+            "revision",
+            "next_sim_ms",
+            "participation"
+          ]
+        },
+        {
+          "name": "city_clock",
+          "columns": [
+            "id",
+            "sim_ms"
+          ]
+        },
+        {
+          "name": "city_harvests",
+          "columns": [
+            "job_id",
+            "citizen_id",
+            "kind",
+            "crop",
+            "qty",
+            "sim_ms"
+          ]
+        },
+        {
+          "name": "city_households",
+          "columns": [
+            "id",
+            "adult_a",
+            "adult_b",
+            "home_group",
+            "policy",
+            "child_allowance"
+          ]
+        },
+        {
+          "name": "city_jobs",
+          "columns": [
+            "id",
+            "citizen_id",
+            "household_id",
+            "revision",
+            "activity",
+            "target",
+            "expected_group",
+            "state",
+            "cmd_id",
+            "created_sim_ms",
+            "arrived_sim_ms",
+            "completed_sim_ms",
+            "error"
+          ]
+        },
+        {
+          "name": "city_marriages",
+          "columns": [
+            "household_id",
+            "adult_a",
+            "adult_b",
+            "visit_a",
+            "visit_b",
+            "policy",
+            "sim_ms"
+          ]
+        },
+        {
+          "name": "city_reports",
+          "columns": [
+            "job_id",
+            "citizen_id",
+            "label",
+            "text",
+            "sources",
+            "sim_ms"
+          ]
+        },
+        {
+          "name": "city_social_visits",
+          "columns": [
+            "job_id",
+            "citizen_id",
+            "household_id",
+            "sim_ms"
+          ]
+        },
+        {
+          "name": "ext_schema",
+          "columns": [
+            "name",
+            "version"
+          ]
+        },
+        {
+          "name": "gratitude_thanks",
+          "columns": [
+            "id",
+            "thanker",
+            "kind",
+            "subject",
+            "recipient",
+            "fact_key",
+            "day",
+            "at"
+          ]
+        },
+        {
+          "name": "home_asks",
+          "columns": [
+            "player_uuid",
+            "last_at"
+          ]
+        },
+        {
+          "name": "home_commands",
+          "columns": [
+            "cmd_id",
+            "kind",
+            "player_uuid",
+            "plot_id",
+            "issued_at",
+            "expires_at"
+          ]
+        },
+        {
+          "name": "home_notices",
+          "columns": [
+            "id",
+            "player_uuid",
+            "text",
+            "created_at",
+            "expires_at",
+            "delivered_at",
+            "dedupe"
+          ]
+        },
+        {
+          "name": "hud_last",
+          "columns": [
+            "key",
+            "last_at"
+          ]
+        },
+        {
+          "name": "hud_usage",
+          "columns": [
+            "key",
+            "hour",
+            "calls"
+          ]
+        },
+        {
+          "name": "ident_attempts",
+          "columns": [
+            "bucket",
+            "at"
+          ]
+        },
+        {
+          "name": "ident_codes",
+          "columns": [
+            "code_hash",
+            "player_uuid",
+            "alias",
+            "issued_at",
+            "expires_at",
+            "issued_by",
+            "used_at",
+            "used_by",
+            "revoked_at",
+            "revoked_reason"
+          ]
+        },
+        {
+          "name": "ident_history",
+          "columns": [
+            "id",
+            "event",
+            "player_uuid",
+            "account_id",
+            "at"
+          ]
+        },
+        {
+          "name": "ident_links",
+          "columns": [
+            "player_uuid",
+            "account_id",
+            "alias",
+            "display_name",
+            "linked_at"
+          ]
+        },
+        {
+          "name": "ident_notices",
+          "columns": [
+            "id",
+            "player_uuid",
+            "kind",
+            "display_name",
+            "created_at",
+            "delivered_at"
+          ]
+        },
+        {
+          "name": "link_commands",
+          "columns": [
+            "cmd_id",
+            "kind",
+            "player_uuid",
+            "issued_at",
+            "expires_at",
+            "issued_by"
+          ]
+        },
+        {
+          "name": "link_credentials",
+          "columns": [
+            "key_id",
+            "token_hash",
+            "resident_id",
+            "scopes",
+            "label",
+            "created_at",
+            "expires_at",
+            "revoked_at"
+          ]
+        },
+        {
+          "name": "link_events",
+          "columns": [
+            "event_id",
+            "server_id",
+            "seq",
+            "kind",
+            "resident_id",
+            "player_uuid",
+            "player_alias",
+            "landmark_id",
+            "occurred_at",
+            "received_at",
+            "credential_key_id",
+            "signature"
+          ]
+        },
+        {
+          "name": "link_players",
+          "columns": [
+            "player_uuid",
+            "alias",
+            "first_seen",
+            "last_seen"
+          ]
+        },
+        {
+          "name": "pantry_shelf",
+          "columns": [
+            "item",
+            "units",
+            "as_of"
+          ]
+        },
+        {
+          "name": "pantry_takes",
+          "columns": [
+            "cmd_id",
+            "order_id",
+            "player_uuid",
+            "player_alias",
+            "item",
+            "qty",
+            "day",
+            "created_at",
+            "state"
+          ]
+        },
+        {
+          "name": "quest_progress",
+          "columns": [
+            "player_uuid",
+            "quest_id",
+            "step_id",
+            "event_id",
+            "completed_at"
+          ]
+        },
+        {
+          "name": "resident_notes",
+          "columns": [
+            "id",
+            "resident_id",
+            "player_uuid",
+            "note",
+            "source_event_id",
+            "created_at"
+          ]
+        },
+        {
+          "name": "shop_asks",
+          "columns": [
+            "player_uuid",
+            "last_at"
+          ]
+        },
+        {
+          "name": "shop_deliveries",
+          "columns": [
+            "cmd_id",
+            "request_id",
+            "role",
+            "issued_at",
+            "expires_at"
+          ]
+        },
+        {
+          "name": "shop_notices",
+          "columns": [
+            "id",
+            "player_uuid",
+            "text",
+            "created_at",
+            "expires_at",
+            "delivered_at",
+            "dedupe"
+          ]
+        },
+        {
+          "name": "shop_requests",
+          "columns": [
+            "request_id",
+            "resident_id",
+            "player_uuid",
+            "player_alias",
+            "account_id",
+            "agent_id",
+            "good_id",
+            "price",
+            "created_at",
+            "expires_at",
+            "state",
+            "state_at",
+            "idempotency_key",
+            "purchase_id",
+            "paid_at",
+            "delivered_at",
+            "anomaly"
+          ]
+        },
+        {
+          "name": "talk_last",
+          "columns": [
+            "player_uuid",
+            "resident_id",
+            "last_at"
+          ]
+        },
+        {
+          "name": "talk_usage",
+          "columns": [
+            "day",
+            "resident_id",
+            "calls"
+          ]
+        },
+        {
+          "name": "village_attendance",
+          "columns": [
+            "event_id",
+            "slot_start",
+            "resident_id",
+            "first_at"
+          ]
+        },
+        {
+          "name": "village_marks",
+          "columns": [
+            "key",
+            "kind",
+            "text",
+            "at"
+          ]
+        }
+      ]
+    },
+    "userdata/server/saves/db.sqlite": {
+      "tables": [
+        {
+          "name": "_body_bak",
+          "columns": [
+            "character_id",
+            "species",
+            "body_type",
+            "hair_style",
+            "beard",
+            "eyes",
+            "accessory",
+            "hair_color",
+            "skin",
+            "eye_color"
+          ]
+        },
+        {
+          "name": "_character_bak",
+          "columns": [
+            "id",
+            "player_uuid",
+            "alias",
+            "tool"
+          ]
+        },
+        {
+          "name": "_inventory_bak",
+          "columns": [
+            "character_id",
+            "items"
+          ]
+        },
+        {
+          "name": "_loadout_bak",
+          "columns": [
+            "id",
+            "character_id",
+            "items"
+          ]
+        },
+        {
+          "name": "_stats_bak",
+          "columns": [
+            "character_id",
+            "level",
+            "exp",
+            "endurance",
+            "fitness",
+            "willpower",
+            "skills"
+          ]
+        },
+        {
+          "name": "ability_set",
+          "columns": [
+            "entity_id",
+            "ability_sets"
+          ]
+        },
+        {
+          "name": "body",
+          "columns": [
+            "body_id",
+            "variant",
+            "body_data"
+          ]
+        },
+        {
+          "name": "character",
+          "columns": [
+            "character_id",
+            "player_uuid",
+            "alias",
+            "waypoint",
+            "hardcore"
+          ]
+        },
+        {
+          "name": "entity",
+          "columns": [
+            "entity_id"
+          ]
+        },
+        {
+          "name": "item",
+          "columns": [
+            "item_id",
+            "parent_container_item_id",
+            "item_definition_id",
+            "stack_size",
+            "position",
+            "properties"
+          ]
+        },
+        {
+          "name": "pet",
+          "columns": [
+            "pet_id",
+            "character_id",
+            "name"
+          ]
+        },
+        {
+          "name": "refinery_schema_history",
+          "columns": [
+            "version",
+            "name",
+            "applied_on",
+            "checksum"
+          ]
+        },
+        {
+          "name": "skill_group",
+          "columns": [
+            "entity_id",
+            "skill_group_kind",
+            "earned_exp",
+            "spent_exp",
+            "skills",
+            "hash_val"
+          ]
+        }
+      ]
+    }
+  }
+}

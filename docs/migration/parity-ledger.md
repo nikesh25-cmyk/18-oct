@@ -1,0 +1,60 @@
+# NemoWorld → Unity parity ledger
+
+Baseline: NemoWorld `f982347e0ab217fe8ca3476f53b1db1349d79328`; Veloren `897211283f6db89f0399826c3669db3f217b2098`; archive SHA-256 `901666d568a21488c5680a6b61c434d05eb677728974574e6d56302ce044aec3`. The six key manifest IDs and hashes are in [source-inventory.json](source-inventory.json). These revisions were clean when inventoried. This ledger describes source presence, not current runtime verification. It is the tracking contract for **all** implemented baseline features and the wider discussed product mission. Expand each row into field-level import and scenario tests before calling it migrated.
+
+Status codes: **S** = source code/content found at pinned revision; **P** = product handbook proposal without proven implementation; **G** = external decision gate. **U** = Unity destination not yet implemented. A future update must name test evidence and data reconciliation before replacing U with verified.
+
+| ID | Domain and preserved behavior | Source at pinned revision | Status | Unity/C# destination and acceptance evidence |
+| --- | --- | --- | --- | --- |
+| ID-01 | Human accounts, sessions, invitation and setup | `server.js`, `src/browser-session.js`, `src/database.js` | S→U | C# identity service; existing accounts map one-to-one; invalid and revoked sessions deny. |
+| ID-02 | Human and AI character identities and operator ownership | `src/characters.js`, `src/resident-framework.js`, `src/database.js` | S→U | Import stable IDs/kinds/owners; Unity labels human, scripted and model-powered actors distinctly. |
+| ID-03 | Scoped AI runtime credentials, budgets, pause/revoke | `src/resident-framework.js`, `runtime/`, `src/vault.js` | S→U | C# grant service; permissions and expiry checked before every action; no credential in client assets. |
+| ID-04 | Private vault and resident memory | `src/vault.js`, schema 27 | S→U | Import encrypted entries without exposing plaintext; preserve access and recovery semantics. |
+| WR-01 | Saved world positions, movement, camera and viewport | `src/world-walk.js`, `src/global-map.js`, `src/map-viewport.js` | S→U | Unity client and C# world service agree on coordinate transforms; restart returns to saved place. |
+| WR-02 | Shared rooms, outdoor regions and district links | `src/world-navigation.js`, `src/spaces.js`, `src/civic.js`, `content/city-districts.json` | S→U | Every supported destination reachable under original access rules; destination IDs stable. |
+| WR-03 | Gardens, cottages, visiting rights and placed objects | `src/voxel-world.js`, `src/placement-policy.js`, `src/frontier.js` | S→U | Import objects and permission edges; unauthorized edit denied; owner returns to creations. |
+| WR-04 | Frontier finite plots, grants and stewardship | `src/frontier.js`, `src/placement-policy.js`, schema 27 | S→U | Import addresses and grants with no duplicate claims or new implied property rights. |
+| WR-05 | Current neon Harr city and eight districts | `content/veloren-world-harr.json`, `veloren-ai-city.json`, `veloren-ai-city-projects.json`, `src/veloren-ext/city*.js` | S→U | Render authored geometry in Unity; compare group counts, place IDs and visible landmarks. |
+| WR-06 | Veloren peace rules, terrain, world dressing and server-side placement | `server/src/nemo/world/`, `server/src/sys/terrain.rs`, `rtsim/` | S→U | Unity world has peaceful behaviors; server validates placement and restart-safe city state. |
+| WR-07 | Atlas and discoveries | `src/veloren-ext/atlas.js`, `veloren-atlas-places.json`, `veloren-discoveries.json`, `server/src/nemo/atlas/` | S→U | Visits create one authoritative fact; atlas text names the same place IDs. |
+| WR-08 | Households, homes and social presence | `src/veloren-ext/home.js`, `src/living-community.js`, Veloren home systems | S→U | Home state and permissions imported; public/private presence matches server. |
+| RS-01 | Eight original residents and their authored identities | `src/veloren-ext/world-residents.js`, `nemo-bridge/roster.json` | S→U | Preserve names, IDs, roles, places, dialogue and history; residents appear in Unity. |
+| RS-02 | 52 villagers, six roles and daily schedules | `content/veloren-villagers.json`, `harr-roles.json`, `src/veloren-ext/villagers.js` | S→U | 52 IDs resolve; schedules drive shared state independent of any observing client. |
+| RS-03 | Scripted, local-model and fallback conversation | `src/veloren-ext/conversations.js`, `npc-logic.js`, `src/veloren-link.js` | S→U | Dialogue labels its source; failure falls back safely; text cannot create a gameplay fact. |
+| RS-04 | Wellbeing needs, careers, shifts, schooling and player action engine | `src/veloren-ext/city-life.js`, `src/veloren-ext/player-sim.js`, current `city-game` commits | S→U | Same bounded actions and state changes; GUI clearly explains needs without penalties invented by Unity. |
+| AC-01 | Six founding principles and Harr charter | `content/harr-charter.json`, product handbook ch. 01 | S→U | Onboarding and world mechanics reflect scholarship, research, cooperation, growth, discovery, abundance. |
+| AC-02 | 16 core city missions and 12 story missions | `content/veloren-missions.json`, `veloren-story-missions.json`, `src/veloren-ext/missions.js` | S→U | IDs, steps and completions preserved; replayed event never double-completes. |
+| AC-03 | Quiet Survey and signed place/resident encounters | `src/veloren-link.js`, `src/veloren-ext/story-missions.js`, Veloren link events | S→U | Server verifies encounter from position and authority, not button press or AI text. |
+| AC-04 | Public works, crew gates and staged construction | `content/veloren-projects.json`, `veloren-ai-city-projects.json`, `src/veloren-ext/city.js`, world manifest | S→U | Stage dependencies, crew conditions and city geometry match source; repeat command is idempotent. |
+| AC-05 | 30 technologies and evidence-fed research | `content/harr-research.json`, `src/veloren-ext/research.js` | S→U | Tech IDs, prerequisites and effects preserved; only recorded facts produce insight. |
+| AC-06 | Pantry, growing, crafting and free sharing | `content/veloren-pantry.json`, `src/veloren-ext/pantry.js`, `server/src/nemo/pantry/` | S→U | Restock and daily limits match source; delivery receipt and inventory reconcile. |
+| AC-07 | Gratitude, apprenticeship, daily surveys | `src/veloren-ext/gratitude.js`, `apprenticeship.js`, `expeditions.js`; content manifests | S→U | Evidence and sequence rules preserved; no unearned title or ranking. |
+| AC-08 | Seasons, village growth, festivals, market and story circle | `src/veloren-ext/seasons.js`, `growth.js`, `world-life.js`, `content/veloren-events.json` | S→U | Clock and local date behavior documented; event attendance derives from stored facts. |
+| AC-09 | Chronicle, library, tasks and guide panels | `src/veloren-ext/stories.js`, `view.js`, `overview.js`, `tasks.js` | S→U | Unity HUD exposes the same underlying records and labels fictional/scripted text. |
+| AC-10 | Player entry, HUD, chat, journal, inventory, projects, management | `app.js`, `index.html`, `docs/GAME_EXPERIENCE.md`, Veloren HUD | S→U | Full Mac GUI journey; no oversized overlapping panels; keyboard and touch flows tested. |
+| WK-01 | Missions, claims, leases and action authority | `src/activity-pipeline.js`, `src/mission-directory.js`, `src/mission-quality.js` | S→U | Claims persist; permissions and one-active-claim rules preserved. |
+| WK-02 | Evidence sources, immutable captures, corrections | `src/database.js`, `src/review-assessment.js`, evidence routes | S→U | Exact source/version and rights kept; correction does not rewrite history. |
+| WK-03 | Independent review, acceptance and adoption | `src/review-assessment.js`, `src/delivery-packet.js`, `server.js` | S→U | Author cannot self-review when independence required; delivery, acceptance, adoption distinct. |
+| WK-04 | Guilds, circles, charters and shared projects | `src/guilds.js`, `src/community.js`, `src/living-community.js` | S→U | Membership, grants and revocations imported; contributions visible with attribution. |
+| WK-05 | Research desk, country atlas, ambassadors and proposals | `src/country-atlas.js`, `src/ambassador-dialogue.js`, `src/decision-brief.js` | S→U | Separate proposals from commissioned work and fictional roles from real authority. |
+| EC-01 | Karma and shop balances/delivery | `src/karma.js`, `src/shop.js`, `src/veloren-ext/shop.js`, `server/src/nemo/shop/` | S→U | Reconcile balance, receipt, inventory and delivered item; retries grant once. |
+| EC-02 | NemoCoins, trade board, market and policy | `src/coins.js`, `src/trade*.js`, `src/goods-policy.js` | S→U | No conversion to money; imported supply, offers and claims reconcile exactly. |
+| EC-03 | Compute entitlements and real billing boundary | Product handbook ch. 09–10 and `src/economy-provenance.js` | S/P/G→U | Distinguish implemented in-world units from proposed paid service; require explicit commercial decision. |
+| GV-01 | Moderation, incident response, appeals and audit | `src/platform.js`, `src/incidents.js`, `src/database.js` | S→U | Server-side denials, action log and appeals retained; Unity cannot bypass. |
+| GV-02 | Export, deletion, backup/restore and recovery | `src/recovery.js`, `src/encrypted-backup.js`, schema 27 | S→U | Restore drill, audit integrity and deletion tombstones survive import. |
+| GV-03 | Privacy across visitor, operator, resident and manager surfaces | `server.js`, `src/platform.js`, `src/vault.js` | S→U | Cross-account and public queries cannot read private content; client bundle contains none. |
+| OP-01 | Local launcher, health, validation and release provenance | `play/play.sh`, `play/health.sh`, `ops/`, `docs/HARR_OPERATIONS.md` | S→U | One-command local launch, health, version and private backup; old stack remains recoverable. |
+| OP-02 | Accessible browser fallback and native GUI scope | `src/map-view.js`, `docs/GAME_EXPERIENCE.md`, handbook ch. 14 | S/P→U | Unity keyboard/touch journeys and an accessible non-3D path to essential actions. |
+| FP-01 | Confidential customer workspaces and service orders | Handbook ch. 08, 11–13, 19 | P→U | Build after baseline parity with cross-tenant security tests and explicit service terms. |
+| FP-02 | Agent teams, capability evaluation and cost accounting | Handbook ch. 06–10, 16, 19 | P→U | Versioned deployment, bounded work graph, held-out quality and complete cost measurement. |
+| FP-03 | Pricing, Life Fund, payments and public launch | Handbook ch. 09–10, 17, 22, 26 | G→U | Separate product decisions, economics, legal entity and payment approval; no launch claim from this ledger. |
+
+## Data mapping work still required
+
+The private archive contains 118 members including `data/world.sqlite`, `data/veloren-link.sqlite`, and `userdata/server/saves/db.sqlite`; no private table rows have been exported. A protected temporary copy yielded [schema names and columns](database-schema-inventory.json): 75 NemoWorld tables, 43 link tables and 13 Veloren save tables. Aggregate row counts are kept outside the repository. Next: map every table and WAL-backed save field into destination contracts, then run a dry import into an empty destination. The existing archive is never modified.
+
+The installed Veloren world record names **387 applied city groups**, while the current combined manifest has **362** groups. All 362 current groups appear in the record; 25 older road/light groups remain in saved state but are absent from that manifest. The importer must preserve those 25 as existing-world geometry or explicitly reconcile them with an earlier manifest. Silently rendering only current authored content would lose part of the owner's saved city.
+
+## Current completion status
+
+M0 source and database-schema inventory: **done**. Field-level database map: **pending**. Unity parity for every row: **pending**. The existing graybox does not satisfy any row merely by displaying a city or research button.
