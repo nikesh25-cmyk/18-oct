@@ -1,0 +1,171 @@
+{
+  "format": "nemoworld-unity-atlas-v1",
+  "bounds": [
+    288,
+    208
+  ],
+  "source_sha256": "65edeefc746bcb32b5b9613d34c5fcf09984bc65a591933308bdb53aa19a2dc5",
+  "regions": [
+    {
+      "world": "commons",
+      "x": 96,
+      "y": 72,
+      "width": 96,
+      "height": 64
+    },
+    {
+      "world": "district:highlands",
+      "x": 96,
+      "y": 36,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "world": "district:snowline",
+      "x": 144,
+      "y": 36,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "world": "district:woodlands",
+      "x": 48,
+      "y": 72,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "world": "district:farmlands",
+      "x": 192,
+      "y": 72,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "world": "orchard",
+      "x": 56,
+      "y": 108,
+      "width": 40,
+      "height": 28
+    },
+    {
+      "world": "harbor",
+      "x": 192,
+      "y": 108,
+      "width": 40,
+      "height": 28
+    },
+    {
+      "world": "district:coast",
+      "x": 96,
+      "y": 136,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "world": "district:harbor",
+      "x": 144,
+      "y": 136,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "world": "district:rainforest",
+      "x": 48,
+      "y": 36,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "world": "district:workshops",
+      "x": 192,
+      "y": 36,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "world": "district:riverlands",
+      "x": 48,
+      "y": 136,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "world": "district:commons",
+      "x": 192,
+      "y": 136,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "world": "district:lakes",
+      "x": 48,
+      "y": 0,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "world": "district:foothills",
+      "x": 96,
+      "y": 0,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "world": "district:grasslands",
+      "x": 144,
+      "y": 0,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "world": "district:gardens",
+      "x": 192,
+      "y": 0,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "world": "district:wetlands",
+      "x": 0,
+      "y": 36,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "world": "district:cities",
+      "x": 240,
+      "y": 36,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "world": "district:islands",
+      "x": 48,
+      "y": 172,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "world": "district:drylands",
+      "x": 96,
+      "y": 172,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "world": "district:desert",
+      "x": 144,
+      "y": 172,
+      "width": 48,
+      "height": 36
+    },
+    {
+      "world": "district:savanna",
+      "x": 192,
+      "y": 172,
+      "width": 48,
+      "height": 36
+    }
+  ]
+}

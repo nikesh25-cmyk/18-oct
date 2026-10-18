@@ -6,9 +6,17 @@ For migration work, clone `codex/nemoworld-unity-migration` from `nikesh25-cmyk/
 
 The owner has asked to migrate the complete NemoWorld/Harr product from its Veloren implementation to Unity, preserving accounts, saved world state, missions, residents, history and the peaceful mission. This branch records that work. The existing `Main.unity` Agent District demo remains available as an editor and control prototype; it is **not** NemoWorld parity.
 
-Open `Assets/Scenes/HarrPreview.unity` for the first data-driven city preview. Its package contains 362 current authored Harr groups plus 25 saved groups recovered from pinned historical manifest revision `616a0a868e`, all placed using the saved world record. Unity batch import compiled and parsed all 387 groups, including coordinate fields. A visual Play-mode walkthrough is still pending because the desktop editor stopped responding during the prior scene-open check. The preview code renders structural cuboids and cyan placeholders for props; clearing operations, residents, gameplay, private-data import and the Unity-to-C# connection are not implemented yet. Do not use it as a replacement for the paused old world.
+Open `Assets/Scenes/HarrPreview.unity` for the first data-driven city preview. Its package contains 362 current authored Harr groups plus 25 saved groups recovered from pinned historical manifest revision `616a0a868e`, all placed using the saved world record. Unity batch import parsed all 387 groups, and a standalone Mac Play walkthrough visibly rendered the city. The preview code renders structural cuboids and cyan placeholders for props; clearing operations, residents, gameplay, private-data import and the Unity-to-C# connection are not implemented yet. Do not use it as a replacement for the paused old world.
 
 The [migration design](docs/superpowers/specs/2026-10-18-nemoworld-unity-migration-design.md), [parity ledger](docs/migration/parity-ledger.md), [source inventory](docs/migration/source-inventory.json), and [city export report](docs/migration/city-export-report.json) state exactly what has been accounted for and what remains. The original installation and a private verified backup are kept outside this repository; no private player data is committed here.
+
+### Expanded world preview
+
+The separate `Assets/Scenes/WorldAtlas.unity` scene uses the exact 23 region rectangles and 288 × 208 finite extent from the pinned NemoWorld global-map module. Its `world-atlas-v1.json` package records the source hash. In Play mode, press **1** for an overview, **2** for a ground view, **WASD/QE** to fly, and **H** to visit the Harr city preview. In Harr, press **M** to return to the atlas. Both scenes are included in build settings.
+
+The atlas's colored terrain and simple landmarks are generated visual placeholders. They are not imported saved construction, granted plots, or a seamless coordinate merge with Harr or the separate frontier registry. The Mac standalone preview was built and opened successfully, and the atlas → Harr → atlas route was checked visually. It remains a development preview, far below the requested final graphics target.
+
+For a local Mac build, set `NEMOWORLD_PREVIEW_OUTPUT` to an absolute `.app` path and run Unity batch mode with `-executeMethod BuildNemoWorldPreview.Run`. This build contains only the atlas and Harr preview scenes; the unrelated Agent District demo is excluded.
 
 ### Local C# arrival fixture
 

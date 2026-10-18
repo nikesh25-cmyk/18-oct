@@ -16,16 +16,9 @@ namespace NemoWorld.Harr
         private int _blocks;
         private int _sprites;
         private int _clears;
+        private int _legacyGroups;
         private float _yaw;
         private float _pitch = 17f;
-
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-        private static void Boot()
-        {
-            if (SceneManager.GetActiveScene().name != "HarrPreview") return;
-            var root = new GameObject("Harr Unity Migration Preview");
-            root.AddComponent<HarrPreviewGame>();
-        }
 
         private void Awake()
         {
@@ -76,6 +69,7 @@ namespace NemoWorld.Harr
                 if (string.IsNullOrEmpty(group.id) || group.anchor == null || group.anchor.Length != 2 || group.ops == null)
                     throw new InvalidDataException("Malformed Harr group");
                 var root = new GameObject(group.id).transform;
+                if (group.provenance == "legacy-saved") _legacyGroups++;
                 root.SetParent(transform, false);
                 var baseX = group.anchor[0];
                 var baseZ = group.anchor[1];
@@ -147,9 +141,9 @@ namespace NemoWorld.Harr
             if (rgb == null || rgb.Length != 3) rgb = new[] { 90, 100, 120 };
             var key = (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
             if (_materials.TryGetValue(key, out var cached)) return cached;
-            var shader = Shader.Find("Standard");
-            if (shader == null) throw new InvalidOperationException("Standard shader unavailable");
-            var material = new Material(shader);
+            var template = Resources.Load<Material>("PreviewStandard");
+            if (template == null) throw new InvalidOperationException("PreviewStandard material unavailable");
+            var material = new Material(template);
             material.color = new Color(rgb[0] / 255f, rgb[1] / 255f, rgb[2] / 255f);
             _materials.Add(key, material);
             return material;
@@ -158,6 +152,7 @@ namespace NemoWorld.Harr
         private void Update()
         {
             if (_camera == null) return;
+            if (Input.GetKeyDown(KeyCode.M)) SceneManager.LoadScene("WorldAtlas");
             var forward = _camera.transform.forward;
             forward.y = 0f;
             forward.Normalize();
@@ -194,9 +189,9 @@ namespace NemoWorld.Harr
             GUI.Label(new Rect(24f, 52f, width - 24f, 25f),
                 _error == null ? $"{_groups} authored groups  •  {_blocks} structures  •  {_sprites} prop placeholders" : _error, style);
             GUI.Label(new Rect(24f, 78f, width - 24f, 25f),
-                "25 saved road/light groups pending reconciliation", style);
+                $"{_legacyGroups} saved groups recovered from earlier Harr manifest", style);
             GUI.Label(new Rect(24f, 101f, width - 24f, 22f),
-                "WASD move  •  Q/E rise/fall  •  hold right mouse to look", style);
+                "WASD/QE fly  •  right mouse look  •  M world atlas", style);
         }
 
         private void OnDestroy()

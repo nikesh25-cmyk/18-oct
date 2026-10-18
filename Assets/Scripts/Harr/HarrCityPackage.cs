@@ -15,6 +15,7 @@ namespace NemoWorld.Harr
     public sealed class HarrGroup
     {
         public string id;
+        public string provenance;
         public int[] anchor;
         public int ground;
         public HarrOp[] ops;

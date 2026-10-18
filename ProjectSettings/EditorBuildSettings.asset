@@ -8,4 +8,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Main.unity
     guid: 6cbf2d5277fd4fa4ac880b63483ef9a3
+  - enabled: 1
+    path: Assets/Scenes/HarrPreview.unity
+    guid: 601ac802458904ef1aca8138bcc93ac4
+  - enabled: 1
+    path: Assets/Scenes/WorldAtlas.unity
+    guid: 7b984c2e341f4a9b971f9b2940c813aa
   m_configObjects: {}
