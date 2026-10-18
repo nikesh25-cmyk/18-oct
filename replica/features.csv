@@ -1,0 +1,17 @@
+feature,area,priority,original,clone,notes
+Walk and run in third person,movement,must,yes,no,Documented by OpenCity
+Drive and leave a vehicle,driving,must,yes,no,Documented by OpenCity
+Explore one coherent city district,world,must,yes,no,Original Unity layout required
+Touch controls and mobile camera,mobile,must,no,no,New product feature
+Assign a research work goal,work,must,no,no,New product feature
+Agents move to workspaces while job state advances,agents,must,no,no,New product feature
+Inspect a cited result and underlying evidence,work,must,no,no,New product feature
+Ambient pedestrians and traffic,world,should,yes,no,Documented by OpenCity
+Several agents coordinate on one job,agents,should,no,no,New product feature
+Save and resume task/world state,persistence,should,no,no,New product feature
+Cancel or retry a failed task,work,should,no,no,New product feature
+Skill progression from verified outcomes,rpg,should,no,no,New product feature
+Fly a helicopter,vehicles,could,yes,no,Documented by OpenCity but not needed for first slice
+Shared multiplayer world,multiplayer,could,no,no,Later product possibility
+Copy GTA character or city art,assets,skip,no,skip,No rights to use protected third-party game assets
+Use San Andreas Unity with GTA data,assets,skip,no,skip,Requires original GTA game data; not a standalone original asset base
