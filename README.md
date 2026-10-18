@@ -4,9 +4,9 @@ An original Unity prototype for a mobile city where AI agents perform work as vi
 
 ## Open and play
 
-1. On the Mac, install [Unity Hub](https://unity.com/download). In Hub, install a Unity 6 editor. The editor alone is enough for this Mac first run; Android Build Support and iOS Build Support can be added later when making phone builds. This project records Unity 6.0.0f1 as its initial editor version; a newer Unity 6 editor may offer to upgrade it.
+1. On the Mac, install [Unity Hub](https://unity.com/download). In Hub, install Unity 6.0.85f1 or a newer compatible Unity 6 editor. The editor alone is enough for this Mac first run; Android Build Support and iOS Build Support can be added later when making phone builds.
 2. Clone the prototype branch on the Mac with `git clone --branch codex/agent-district-prototype https://github.com/nikesh25-cmyk/18-oct.git`, then run `bash scripts/mac-first-run.sh` from the new `18-oct` folder. The script checks the Mac and editor and opens the project in Unity. Alternatively, use Unity Hub's **Add project from disk** to select that folder.
-3. If Unity prompts to upgrade the project to the installed Unity 6 editor, accept. Wait for the first import and for the Console to show no compile errors. Open `Assets/Scenes/Main.unity` and press Play. The world is generated in memory when the scene starts, so the scene file is intentionally nearly empty.
+3. If Unity prompts to upgrade the project to a newer Unity 6 editor, accept. Wait for the first import and for the Console to show no compile errors. Open `Assets/Scenes/Main.unity` and press Play. The world is generated in memory when the scene starts, so the scene file is intentionally nearly empty. The Mac first run was verified with Unity 6.0.85f1.
 4. On desktop, use WASD to move, mouse to look, Shift to run, and E to enter or exit the red car. Use the work board at the top right to start the demo task.
 5. On a phone, drag on the left side to move or drive and on the right side to look or turn. Use the on-screen car and work board buttons. The prototype is landscape-oriented.
 
@@ -46,7 +46,7 @@ Run backend checks with:
 PYTHONPATH=server python3 -m unittest discover -s server/tests -v
 ```
 
-The checks exercise agent handoffs, evidence URLs, demo labeling, cancellation, API routes, and the DeepSeek adapter with fake transport. The Unity scene and live DeepSeek call must still be tested separately; this cloud machine does not have the Unity editor or a DeepSeek credential.
+The checks exercise agent handoffs, evidence URLs, demo labeling, cancellation, API routes, and the DeepSeek adapter with fake transport. The Unity scene has also been opened and entered Play mode on a Mac with no Console errors. The live DeepSeek call still requires a backend credential and a separate test.
 
 ## Project boundaries
 
