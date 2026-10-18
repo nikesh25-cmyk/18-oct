@@ -17,6 +17,11 @@ namespace NemoWorld.Harr
         private int _sprites;
         private int _clears;
         private int _legacyGroups;
+        private HarrContentPackage _content;
+        private bool _guideOpen;
+        private int _guideTab;
+        private int _guideIndex;
+        private Vector2 _guideScroll;
         private float _yaw;
         private float _pitch = 17f;
 
@@ -46,6 +51,9 @@ namespace NemoWorld.Harr
                 if (package == null || package.format != "harr-unity-city-v1" || package.groups == null)
                     throw new InvalidDataException("Unsupported or empty Harr city package");
                 BuildCity(package);
+                var contentPath = Path.Combine(Application.streamingAssetsPath, "NemoWorld", "harr-authored-content-v1.json");
+                _content = JsonUtility.FromJson<HarrContentPackage>(File.ReadAllText(contentPath));
+                _content.Validate();
             }
             catch (Exception error)
             {
@@ -153,6 +161,8 @@ namespace NemoWorld.Harr
         {
             if (_camera == null) return;
             if (Input.GetKeyDown(KeyCode.M)) SceneManager.LoadScene("WorldAtlas");
+            if (Input.GetKeyDown(KeyCode.Tab)) _guideOpen = !_guideOpen;
+            if (Input.GetKeyDown(KeyCode.Escape)) _guideOpen = false;
             var forward = _camera.transform.forward;
             forward.y = 0f;
             forward.Normalize();
@@ -191,7 +201,86 @@ namespace NemoWorld.Harr
             GUI.Label(new Rect(24f, 78f, width - 24f, 25f),
                 $"{_legacyGroups} saved groups recovered from earlier Harr manifest", style);
             GUI.Label(new Rect(24f, 101f, width - 24f, 22f),
-                "WASD/QE fly  •  right mouse look  •  M world atlas", style);
+                "WASD/QE fly  •  right mouse look  •  Tab guide  •  M atlas", style);
+            if (_guideOpen && _content != null) DrawGuide();
+        }
+
+        private void DrawGuide()
+        {
+            var width = Mathf.Min(560f, Screen.width - 24f);
+            var height = Mathf.Min(720f, Screen.height - 160f);
+            if (width < 280f || height < 250f) return;
+            var panel = new Rect(Screen.width - width - 12f, 12f, width, height);
+            GUI.Box(panel, "");
+            var title = new GUIStyle(GUI.skin.label) { fontSize = 20, fontStyle = FontStyle.Bold };
+            title.normal.textColor = Color.white;
+            GUI.Label(new Rect(panel.x + 16f, panel.y + 12f, width - 72f, 28f), "HARR  /  SOURCE GUIDE", title);
+            if (GUI.Button(new Rect(panel.x + width - 43f, panel.y + 10f, 30f, 28f), "×")) _guideOpen = false;
+
+            var tabs = new[] { "Residents (52)", "Missions (28)", "Research (30)" };
+            for (var i = 0; i < tabs.Length; i++)
+                if (GUI.Button(new Rect(panel.x + 12f + i * (width - 24f) / 3f,
+                    panel.y + 51f, (width - 24f) / 3f, 31f), tabs[i]))
+                {
+                    _guideTab = i;
+                    _guideIndex = 0;
+                    _guideScroll = Vector2.zero;
+                }
+
+            var listY = panel.y + 95f;
+            var listHeight = Mathf.Min(220f, height * 0.32f);
+            var total = _guideTab == 0 ? _content.residents.Length :
+                _guideTab == 1 ? _content.missions.Length : _content.techs.Length;
+            var view = new Rect(panel.x + 12f, listY, width - 24f, listHeight);
+            _guideScroll = GUI.BeginScrollView(view, _guideScroll,
+                new Rect(0f, 0f, width - 46f, total * 30f));
+            for (var i = 0; i < total; i++)
+            {
+                var label = _guideTab == 0 ? _content.residents[i].name :
+                    _guideTab == 1 ? _content.missions[i].content.title : _content.techs[i].name;
+                if (GUI.Button(new Rect(0f, i * 30f, width - 50f, 27f),
+                    (i == _guideIndex ? "●  " : "   ") + label)) _guideIndex = i;
+            }
+            GUI.EndScrollView();
+
+            var detail = new GUIStyle(GUI.skin.label) { fontSize = 14, wordWrap = true };
+            detail.normal.textColor = Color.white;
+            var detailY = listY + listHeight + 12f;
+            var text = GuideDetail();
+            GUI.Label(new Rect(panel.x + 16f, detailY, width - 32f, height - (detailY - panel.y) - 47f),
+                text, detail);
+            var foot = new GUIStyle(GUI.skin.label) { fontSize = 12, wordWrap = true };
+            foot.normal.textColor = new Color(0.75f, 0.87f, 0.95f);
+            GUI.Label(new Rect(panel.x + 16f, panel.y + height - 39f, width - 32f, 33f),
+                "Authored definitions only. No simulated presence, mission progress or research unlocks.", foot);
+        }
+
+        private string GuideDetail()
+        {
+            if (_guideTab == 0)
+            {
+                var resident = _content.residents[_guideIndex];
+                return resident.name + "  /  " + resident.role + "  /  " + resident.id +
+                    "\n\n" + resident.capabilities + "\n\nLimitations: " + resident.limitations;
+            }
+            if (_guideTab == 1)
+            {
+                var mission = _content.missions[_guideIndex];
+                var item = mission.content;
+                var text = item.title + "  /  " + mission.source + "  /  " + item.id +
+                    "\nPrinciple: " + item.principle + "\n\n" +
+                    (!string.IsNullOrEmpty(item.purpose) ? item.purpose : item.blurb);
+                if (!string.IsNullOrEmpty(item.how)) text += "\n\n" + item.how;
+                if (item.steps != null)
+                    foreach (var step in item.steps)
+                        text += "\n• " + (string.IsNullOrEmpty(step.label) ? step.kind : step.label) +
+                            " (" + step.count + ")";
+                return text;
+            }
+            var tech = _content.techs[_guideIndex];
+            return tech.name + "  /  " + tech.id + "\nInsight cost: " + tech.cost +
+                "\nPrerequisites: " + (tech.needs == null || tech.needs.Length == 0 ? "none" : string.Join(", ", tech.needs)) +
+                "\n\n" + tech.text;
         }
 
         private void OnDestroy()

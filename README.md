@@ -18,6 +18,8 @@ The atlas's colored terrain and simple landmarks are generated visual placeholde
 
 The source-authored `harr-authored-content-v1.json` package also preserves 52 villagers, 16 core missions, 12 story missions and 30 research technologies with their exact authored fields, IDs and source hashes. Unity does not yet simulate these residents or award mission/research progress; those require the authoritative service and saved-state import.
 
+In the Harr preview, press **Tab** to open the read-only source guide. It lists all 52 residents, 28 missions and 30 technologies with their stable IDs and authored descriptions. Press Tab or Escape to close it. Selecting an entry cannot grant progress or unlock research. The source resident coordinates are all `(0, 0)`, so Unity does not invent placements for them.
+
 For a local Mac build, set `NEMOWORLD_PREVIEW_OUTPUT` to an absolute `.app` path and run Unity batch mode with `-executeMethod BuildNemoWorldPreview.Run`. This build contains only the atlas and Harr preview scenes; the unrelated Agent District demo is excluded.
 
 ### Local C# arrival fixture
