@@ -16,6 +16,8 @@ The separate `Assets/Scenes/WorldAtlas.unity` scene uses the exact 23 region rec
 
 The atlas's colored terrain and simple landmarks are generated visual placeholders. They are not imported saved construction, granted plots, or a seamless coordinate merge with Harr or the separate frontier registry. The Mac standalone preview was built and opened successfully, and the atlas → Harr → atlas route was checked visually. It remains a development preview, far below the requested final graphics target.
 
+The source-authored `harr-authored-content-v1.json` package also preserves 52 villagers, 16 core missions, 12 story missions and 30 research technologies with their exact authored fields, IDs and source hashes. Unity does not yet simulate these residents or award mission/research progress; those require the authoritative service and saved-state import.
+
 For a local Mac build, set `NEMOWORLD_PREVIEW_OUTPUT` to an absolute `.app` path and run Unity batch mode with `-executeMethod BuildNemoWorldPreview.Run`. This build contains only the atlas and Harr preview scenes; the unrelated Agent District demo is excluded.
 
 ### Local C# arrival fixture
