@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 namespace NemoWorld.Harr
@@ -39,7 +40,10 @@ namespace NemoWorld.Harr
         private void Awake()
         {
             Application.targetFrameRate = 60;
-            RenderSettings.ambientLight = new Color(0.65f, 0.7f, 0.8f);
+            RenderSettings.skybox = null;
+            RenderSettings.ambientMode = AmbientMode.Flat;
+            RenderSettings.ambientLight = new Color(0.72f, 0.75f, 0.82f);
+            RenderSettings.fog = false;
             var light = new GameObject("Atlas sunlight").AddComponent<Light>();
             light.type = LightType.Directional;
             light.intensity = 1.25f;
@@ -103,12 +107,79 @@ namespace NemoWorld.Harr
                 var center = new Vector3(region.x + region.width / 2f - Columns / 2f, 0f,
                     region.y + region.height / 2f - Rows / 2f);
                 var tone = Tone(region.world);
-                AddBox(root, "region terrain preview", center,
-                    new Vector3(region.width - 0.6f, 1.3f, region.height - 0.6f), tone);
-                AddBox(root, "region edge", center + Vector3.down * 0.68f,
-                    new Vector3(region.width, 0.25f, region.height), tone * 0.55f);
+                AddTerrain(root, region, tone);
                 Decorate(root, region, tone);
             }
+        }
+
+        private void AddTerrain(Transform root, WorldAtlasRegion region, Color tone)
+        {
+            var nx = Mathf.Max(1, Mathf.CeilToInt(region.width / 2f));
+            var nz = Mathf.Max(1, Mathf.CeilToInt(region.height / 2f));
+            var vertices = new Vector3[(nx + 1) * (nz + 1)];
+            var uv = new Vector2[vertices.Length];
+            var triangles = new int[nx * nz * 6];
+            for (var z = 0; z <= nz; z++)
+                for (var x = 0; x <= nx; x++)
+                {
+                    var localX = x * region.width / (float)nx;
+                    var localZ = z * region.height / (float)nz;
+                    var worldX = region.x + localX - Columns / 2f;
+                    var worldZ = region.y + localZ - Rows / 2f;
+                    var edge = Mathf.Min(localX, region.width - localX, localZ, region.height - localZ);
+                    var relief = Relief(region.world) * Mathf.SmoothStep(0f, 1f, edge / 5f);
+                    var height = 0.55f + Mathf.PerlinNoise(worldX * 0.034f + 8f, worldZ * 0.034f + 7f) * 2.15f
+                        + Mathf.PerlinNoise(worldX * 0.11f + 19f, worldZ * 0.11f + 23f) * 0.38f + relief;
+                    var index = z * (nx + 1) + x;
+                    vertices[index] = new Vector3(worldX, height, worldZ);
+                    uv[index] = new Vector2(worldX / 6f, worldZ / 6f);
+                }
+            var t = 0;
+            for (var z = 0; z < nz; z++)
+                for (var x = 0; x < nx; x++)
+                {
+                    var a = z * (nx + 1) + x;
+                    var b = a + nx + 1;
+                    triangles[t++] = a; triangles[t++] = b; triangles[t++] = a + 1;
+                    triangles[t++] = a + 1; triangles[t++] = b; triangles[t++] = b + 1;
+                }
+            var mesh = new Mesh { name = "Generated atlas terrain: " + region.world };
+            mesh.vertices = vertices;
+            mesh.uv = uv;
+            mesh.triangles = triangles;
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+            var terrain = new GameObject("generated terrain preview");
+            terrain.transform.SetParent(root, false);
+            terrain.AddComponent<MeshFilter>().sharedMesh = mesh;
+            terrain.AddComponent<MeshRenderer>().sharedMaterial = TerrainMaterial(region.world, tone);
+        }
+
+        private static float Relief(string name)
+        {
+            if (name.Contains("highland") || name.Contains("snow")) return 5.5f;
+            if (name.Contains("foothill") || name.Contains("forest")) return 2.5f;
+            if (name.Contains("desert") || name.Contains("dry")) return 1.2f;
+            return 0.4f;
+        }
+
+        private Material TerrainMaterial(string biome, Color tone)
+        {
+            var key = StableHash("terrain:" + biome);
+            if (materials.TryGetValue(key, out var cached)) return cached;
+            var template = Resources.Load<Material>("PreviewStandard");
+            if (template == null) throw new InvalidOperationException("PreviewStandard material unavailable");
+            var material = new Material(template);
+            var asset = biome.Contains("desert") || biome.Contains("dry") ? "forrest_sand_01" :
+                biome.Contains("city") || biome.Contains("workshop") ? "worn_asphalt" :
+                biome.Contains("snow") || biome.Contains("highland") ? "concrete_wall_004" : "leafy_grass";
+            material.mainTexture = Resources.Load<Texture2D>("Visual/" + asset + "_Diffuse");
+            material.SetTexture("_BumpMap", Resources.Load<Texture2D>("Visual/" + asset + "_nor_gl"));
+            material.EnableKeyword("_NORMALMAP");
+            material.color = Color.Lerp(tone, Color.white, 0.72f);
+            material.SetFloat("_Glossiness", 0.18f);
+            materials.Add(key, material);
+            return material;
         }
 
         private void Decorate(Transform root, WorldAtlasRegion region, Color tone)
@@ -122,9 +193,23 @@ namespace NemoWorld.Harr
                 var v = ((seed / 7 + i * 71) % 991) / 991f;
                 var x = region.x + 3f + u * Mathf.Max(1f, region.width - 6f) - Columns / 2f;
                 var z = region.y + 3f + v * Mathf.Max(1f, region.height - 6f) - Rows / 2f;
-                var height = 1.5f + ((seed + i * 13) % 6);
-                AddBox(root, "generated preview landmark", new Vector3(x, 0.7f + height / 2f, z),
-                    new Vector3(1.1f, height, 1.1f), Color.Lerp(tone, Color.white, 0.27f));
+                var height = 1.5f + ((seed + i * 13) % 4);
+                var baseHeight = 0.55f + Mathf.PerlinNoise(x * 0.034f + 8f, z * 0.034f + 7f) * 2.15f
+                    + Mathf.PerlinNoise(x * 0.11f + 19f, z * 0.11f + 23f) * 0.38f;
+                var ground = baseHeight + Relief(region.world) * 0.7f;
+                if (region.world.Contains("city") || region.world.Contains("workshop"))
+                    AddBox(root, "generated skyline cue", new Vector3(x, ground + height / 2f, z),
+                        new Vector3(1.5f, height, 1.5f), Color.Lerp(tone, Color.white, 0.27f));
+                else if (region.world.Contains("highland") || region.world.Contains("snow") || region.world.Contains("desert"))
+                    AddShape(root, PrimitiveType.Sphere, "generated rock cue", new Vector3(x, ground + 0.7f, z),
+                        new Vector3(2f, 1.4f, 1.5f), Color.Lerp(tone, Color.white, 0.18f));
+                else
+                {
+                    AddShape(root, PrimitiveType.Cylinder, "generated tree trunk", new Vector3(x, ground + height / 2f, z),
+                        new Vector3(0.35f, height / 2f, 0.35f), new Color(0.29f, 0.23f, 0.18f));
+                    AddShape(root, PrimitiveType.Sphere, "generated tree canopy", new Vector3(x, ground + height + 0.9f, z),
+                        new Vector3(2.2f, 2.3f, 2.2f), new Color(0.25f, 0.42f, 0.25f));
+                }
             }
         }
 
@@ -151,7 +236,12 @@ namespace NemoWorld.Harr
 
         private void AddBox(Transform parent, string name, Vector3 position, Vector3 size, Color color)
         {
-            var box = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            AddShape(parent, PrimitiveType.Cube, name, position, size, color);
+        }
+
+        private void AddShape(Transform parent, PrimitiveType shape, string name, Vector3 position, Vector3 size, Color color)
+        {
+            var box = GameObject.CreatePrimitive(shape);
             box.name = name;
             box.transform.SetParent(parent, false);
             box.transform.position = position;
@@ -242,6 +332,8 @@ namespace NemoWorld.Harr
         private void OnDestroy()
         {
             foreach (var material in materials.Values) Destroy(material);
+            foreach (var filter in GetComponentsInChildren<MeshFilter>())
+                if (filter.sharedMesh != null && filter.sharedMesh.name.StartsWith("Generated atlas terrain:")) Destroy(filter.sharedMesh);
         }
     }
 }

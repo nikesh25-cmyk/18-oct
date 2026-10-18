@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 namespace NemoWorld.Harr
@@ -9,7 +10,7 @@ namespace NemoWorld.Harr
     // M1 migration preview: authored city geometry only. No mission or economy authority lives here.
     public sealed class HarrPreviewGame : MonoBehaviour
     {
-        private readonly Dictionary<int, Material> _materials = new Dictionary<int, Material>();
+        private readonly Dictionary<string, Material> _materials = new Dictionary<string, Material>();
         private Camera _camera;
         private string _error;
         private int _groups;
@@ -23,25 +24,36 @@ namespace NemoWorld.Harr
         private int _guideIndex;
         private Vector2 _guideScroll;
         private float _yaw;
-        private float _pitch = 17f;
+        private float _pitch = 13f;
 
         private void Awake()
         {
             Application.targetFrameRate = 60;
-            RenderSettings.ambientLight = new Color(0.52f, 0.6f, 0.78f);
+            QualitySettings.antiAliasing = 4;
+            QualitySettings.anisotropicFiltering = AnisotropicFiltering.ForceEnable;
+            QualitySettings.shadowDistance = 160f;
+            RenderSettings.skybox = Resources.Load<Material>("Visual/NightSky");
+            RenderSettings.ambientMode = AmbientMode.Flat;
+            RenderSettings.ambientLight = new Color(0.72f, 0.75f, 0.82f);
+            RenderSettings.fog = true;
+            RenderSettings.fogColor = new Color(0.18f, 0.26f, 0.34f);
+            RenderSettings.fogMode = FogMode.ExponentialSquared;
+            RenderSettings.fogDensity = 0.0025f;
             var sun = new GameObject("Harr night lighting").AddComponent<Light>();
             sun.type = LightType.Directional;
-            sun.intensity = 1.35f;
-            sun.color = new Color(0.65f, 0.8f, 1f);
+            sun.intensity = 1.2f;
+            sun.color = new Color(0.83f, 0.88f, 1f);
+            sun.shadows = LightShadows.Soft;
+            sun.shadowStrength = 0.48f;
             sun.transform.rotation = Quaternion.Euler(55f, -28f, 0f);
 
             var cameraObject = new GameObject("Harr preview camera");
             _camera = cameraObject.AddComponent<Camera>();
-            _camera.clearFlags = CameraClearFlags.SolidColor;
+            _camera.clearFlags = CameraClearFlags.Skybox;
             _camera.backgroundColor = new Color(0.035f, 0.05f, 0.12f);
             _camera.fieldOfView = 72f;
             cameraObject.AddComponent<AudioListener>();
-            cameraObject.transform.position = new Vector3(0f, 17f, -35f);
+            cameraObject.transform.position = new Vector3(0f, 34f, -105f);
             cameraObject.transform.rotation = Quaternion.Euler(_pitch, _yaw, 0f);
 
             try
@@ -69,7 +81,7 @@ namespace NemoWorld.Harr
             ground.name = "Harr terrain preview";
             ground.transform.position = new Vector3(0f, -0.6f, 0f);
             ground.transform.localScale = new Vector3(900f, 1f, 900f);
-            ground.GetComponent<Renderer>().sharedMaterial = MaterialFor(new[] { 38, 48, 71 });
+            ground.GetComponent<Renderer>().sharedMaterial = MaterialFor(new[] { 210, 215, 218 }, "asphalt", 110f);
             Destroy(ground.GetComponent<Collider>());
 
             foreach (var group in package.groups)
@@ -91,7 +103,7 @@ namespace NemoWorld.Harr
                             AddBox(root, "Block", baseX + Mid(op.@from[0], op.to[0]),
                                 baseY + Mid(op.@from[2], op.to[2]), baseZ + Mid(op.@from[1], op.to[1]),
                                 Extent(op.@from[0], op.to[0]), Extent(op.@from[2], op.to[2]),
-                                Extent(op.@from[1], op.to[1]), op.rgb);
+                                Extent(op.@from[1], op.to[1]), op.rgb, SurfaceFor(group.id));
                             _blocks++;
                             break;
                         case "foundation":
@@ -100,14 +112,12 @@ namespace NemoWorld.Harr
                             AddBox(root, "Foundation", baseX + Mid(op.@from[0], op.to[0]),
                                 baseY - op.depth / 2f, baseZ + Mid(op.@from[1], op.to[1]),
                                 Extent(op.@from[0], op.to[0]), op.depth,
-                                Extent(op.@from[1], op.to[1]), op.rgb);
+                                Extent(op.@from[1], op.to[1]), op.rgb, SurfaceFor(group.id));
                             _blocks++;
                             break;
                         case "sprite":
                             if (op.at == null || op.at.Length != 3) throw new InvalidDataException("Malformed sprite in " + group.id);
-                            AddBox(root, "Sprite placeholder: " + op.sprite,
-                                baseX + op.at[0], baseY + op.at[2] + 0.4f, baseZ + op.at[1],
-                                0.65f, 0.8f, 0.65f, new[] { 35, 207, 225 });
+                            AddProp(root, op.sprite, baseX + op.at[0], baseY + op.at[2], baseZ + op.at[1]);
                             _sprites++;
                             break;
                         case "clear":
@@ -132,27 +142,144 @@ namespace NemoWorld.Harr
         private static float Mid(int a, int b) { return (a + b) / 2f; }
         private static float Extent(int a, int b) { return b - a + 1f; }
 
+        private static string SurfaceFor(string id)
+        {
+            if (id.Contains("path") || id.Contains("road") || id.Contains("plaza") || id.Contains("transit")) return "asphalt";
+            if (id.Contains("solar") || id.Contains("archive") || id.Contains("tower")) return "metal";
+            return "concrete";
+        }
+
         private void AddBox(Transform parent, string name, float x, float y, float z,
-            float sx, float sy, float sz, int[] rgb)
+            float sx, float sy, float sz, int[] rgb, string surface)
         {
             var block = GameObject.CreatePrimitive(PrimitiveType.Cube);
             block.name = name;
             block.transform.SetParent(parent, false);
             block.transform.position = new Vector3(x, y, z);
             block.transform.localScale = new Vector3(sx, sy, sz);
-            block.GetComponent<Renderer>().sharedMaterial = MaterialFor(rgb);
+            block.GetComponent<Renderer>().sharedMaterial = MaterialFor(rgb, surface, Mathf.Clamp(Mathf.Max(sx, sz) / 5f, 1f, 8f));
             Destroy(block.GetComponent<Collider>());
         }
 
-        private Material MaterialFor(int[] rgb)
+        private Material MaterialFor(int[] rgb, string surface, float tiling = 2f)
         {
             if (rgb == null || rgb.Length != 3) rgb = new[] { 90, 100, 120 };
-            var key = (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
+            tiling = Mathf.Round(tiling);
+            var key = surface + ":" + rgb[0] + ":" + rgb[1] + ":" + rgb[2] + ":" + tiling;
             if (_materials.TryGetValue(key, out var cached)) return cached;
             var template = Resources.Load<Material>("PreviewStandard");
             if (template == null) throw new InvalidOperationException("PreviewStandard material unavailable");
             var material = new Material(template);
-            material.color = new Color(rgb[0] / 255f, rgb[1] / 255f, rgb[2] / 255f);
+            var source = new Color(rgb[0] / 255f, rgb[1] / 255f, rgb[2] / 255f);
+            material.color = Color.Lerp(source, Color.white, surface == "concrete" ? 0.56f : 0.38f);
+            var asset = surface == "asphalt" ? "worn_asphalt" : surface == "metal" ? "blue_metal_plate" : "concrete_wall_004";
+            material.mainTexture = Resources.Load<Texture2D>("Visual/" + asset + "_Diffuse");
+            material.SetTexture("_BumpMap", Resources.Load<Texture2D>("Visual/" + asset + "_nor_gl"));
+            material.EnableKeyword("_NORMALMAP");
+            material.mainTextureScale = new Vector2(tiling, tiling);
+            material.SetTextureScale("_BumpMap", new Vector2(tiling, tiling));
+            material.SetFloat("_Metallic", surface == "metal" ? 0.65f : 0.03f);
+            material.SetFloat("_Glossiness", surface == "metal" ? 0.68f : 0.30f);
+            material.enableInstancing = true;
+            _materials.Add(key, material);
+            return material;
+        }
+
+        private void AddProp(Transform parent, string sprite, float x, float y, float z)
+        {
+            // Source sprites have only a name and saved position. These are visual interpretations.
+            var root = new GameObject("Visual proxy: " + sprite).transform;
+            root.SetParent(parent, false);
+            root.position = new Vector3(x, y, z);
+            if (sprite == "StreetLamp" && AddStreetLampModel(root, y)) return;
+            if (sprite.Contains("Lamp") || sprite.Contains("Lantern") || sprite == "Candle")
+            {
+                var height = sprite == "Candle" ? 0.55f : 2.6f;
+                AddProxy(root, PrimitiveType.Cylinder, "fixture", new Vector3(0f, height / 2f, 0f),
+                    new Vector3(0.09f, height / 2f, 0.09f), new[] { 165, 154, 128 }, "metal");
+                var bulb = AddProxy(root, PrimitiveType.Sphere, "warm glass", new Vector3(0f, height, 0f),
+                    Vector3.one * (sprite == "Candle" ? 0.18f : 0.38f), new[] { 255, 207, 112 }, "metal");
+                bulb.GetComponent<Renderer>().sharedMaterial = GlowMaterial();
+            }
+            else if (sprite.Contains("Planter") || sprite.Contains("Flowerpot"))
+            {
+                AddProxy(root, PrimitiveType.Cylinder, "planter", new Vector3(0f, 0.28f, 0f),
+                    new Vector3(0.38f, 0.28f, 0.38f), new[] { 164, 122, 91 }, "concrete");
+                AddProxy(root, PrimitiveType.Sphere, "foliage", new Vector3(0f, 0.85f, 0f),
+                    new Vector3(0.85f, 0.9f, 0.85f), new[] { 50, 128, 75 }, "concrete");
+            }
+            else
+            {
+                AddProxy(root, PrimitiveType.Cube, "unmapped source prop", new Vector3(0f, 0.38f, 0f),
+                    new Vector3(0.65f, 0.75f, 0.65f), new[] { 124, 161, 176 }, "metal");
+            }
+        }
+
+        private bool AddStreetLampModel(Transform root, float groundY)
+        {
+            var source = Resources.Load<GameObject>("Visual/Models/street_lamp_01_1k");
+            if (source == null) return false;
+            var model = Instantiate(source, root);
+            model.name = "Poly Haven CC0 street lamp";
+            var renderers = model.GetComponentsInChildren<Renderer>();
+            if (renderers.Length == 0) return false;
+            var bounds = renderers[0].bounds;
+            foreach (var renderer in renderers) bounds.Encapsulate(renderer.bounds);
+            var scale = 3.1f / Mathf.Max(0.1f, bounds.size.y);
+            model.transform.localScale *= scale;
+            foreach (var renderer in renderers) renderer.sharedMaterial = StreetLampMaterial();
+            bounds = renderers[0].bounds;
+            foreach (var renderer in renderers) bounds.Encapsulate(renderer.bounds);
+            model.transform.position += Vector3.up * (groundY - bounds.min.y);
+            if (_sprites % 16 == 0)
+            {
+                var glow = new GameObject("Lamp light").AddComponent<Light>();
+                glow.transform.SetParent(root, false);
+                glow.transform.localPosition = new Vector3(0f, 2.6f, 0f);
+                glow.type = LightType.Point;
+                glow.color = new Color(1f, 0.73f, 0.40f);
+                glow.range = 7f;
+                glow.intensity = 1.6f;
+            }
+            return true;
+        }
+
+        private Material StreetLampMaterial()
+        {
+            const string key = "polyhaven-street-lamp";
+            if (_materials.TryGetValue(key, out var cached)) return cached;
+            var material = new Material(Resources.Load<Material>("PreviewStandard"));
+            material.mainTexture = Resources.Load<Texture2D>("Visual/Models/textures/street_lamp_01_diff_1k");
+            material.SetTexture("_BumpMap", Resources.Load<Texture2D>("Visual/Models/textures/street_lamp_01_nor_gl_1k"));
+            material.EnableKeyword("_NORMALMAP");
+            material.SetFloat("_Metallic", 0.72f);
+            material.SetFloat("_Glossiness", 0.38f);
+            material.enableInstancing = true;
+            _materials.Add(key, material);
+            return material;
+        }
+
+        private GameObject AddProxy(Transform parent, PrimitiveType shape, string name, Vector3 offset,
+            Vector3 size, int[] rgb, string surface)
+        {
+            var obj = GameObject.CreatePrimitive(shape);
+            obj.name = name;
+            obj.transform.SetParent(parent, false);
+            obj.transform.localPosition = offset;
+            obj.transform.localScale = size;
+            obj.GetComponent<Renderer>().sharedMaterial = MaterialFor(rgb, surface);
+            Destroy(obj.GetComponent<Collider>());
+            return obj;
+        }
+
+        private Material GlowMaterial()
+        {
+            const string key = "glow";
+            if (_materials.TryGetValue(key, out var cached)) return cached;
+            var material = new Material(Resources.Load<Material>("PreviewStandard"));
+            material.color = new Color(1f, 0.74f, 0.37f);
+            material.EnableKeyword("_EMISSION");
+            material.SetColor("_EmissionColor", new Color(1.8f, 1.05f, 0.35f));
             _materials.Add(key, material);
             return material;
         }

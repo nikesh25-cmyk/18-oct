@@ -13,7 +13,8 @@ public static class BuildNemoWorldPreview
         PlayerSettings.companyName = "NemoWorld";
         PlayerSettings.productName = "NemoWorld Preview";
         PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Standalone, "org.nemoworld.preview");
-        var scenes = new[] { "Assets/Scenes/WorldAtlas.unity", "Assets/Scenes/HarrPreview.unity" };
+        ConfigureVisualAssets.Prepare();
+        var scenes = new[] { "Assets/Scenes/HarrPreview.unity", "Assets/Scenes/WorldAtlas.unity" };
         var report = BuildPipeline.BuildPlayer(scenes, output, BuildTarget.StandaloneOSX,
             BuildOptions.Development);
         if (report.summary.result != BuildResult.Succeeded)
