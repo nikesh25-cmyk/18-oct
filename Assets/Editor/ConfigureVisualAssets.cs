@@ -15,6 +15,11 @@ public static class ConfigureVisualAssets
         ConfigureTexture(Root + "rooftop_night_hdri.hdr", false);
         ConfigureTexture(Root + "Models/textures/street_lamp_01_diff_1k.jpg", false);
         ConfigureTexture(Root + "Models/textures/street_lamp_01_nor_gl_1k.exr", true);
+        foreach (var guid in AssetDatabase.FindAssets("t:Texture2D", new[] { Root + "Models/textures" }))
+        {
+            var path = AssetDatabase.GUIDToAssetPath(guid);
+            if (path.Contains("_nor_gl_1k.")) ConfigureTexture(path, true);
+        }
         var skyPath = Root + "NightSky.mat";
         var sky = AssetDatabase.LoadAssetAtPath<Material>(skyPath);
         if (sky == null)

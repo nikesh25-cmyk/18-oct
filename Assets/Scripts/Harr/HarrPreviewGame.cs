@@ -11,6 +11,7 @@ namespace NemoWorld.Harr
     public sealed class HarrPreviewGame : MonoBehaviour
     {
         private readonly Dictionary<string, Material> _materials = new Dictionary<string, Material>();
+        private readonly HarrArtAssets _artAssets = new HarrArtAssets();
         private Camera _camera;
         private string _error;
         private int _groups;
@@ -53,7 +54,7 @@ namespace NemoWorld.Harr
             _camera.backgroundColor = new Color(0.035f, 0.05f, 0.12f);
             _camera.fieldOfView = 72f;
             cameraObject.AddComponent<AudioListener>();
-            cameraObject.transform.position = new Vector3(0f, 34f, -105f);
+            cameraObject.transform.position = new Vector3(0f, 78f, -125f);
             cameraObject.transform.rotation = Quaternion.Euler(_pitch, _yaw, 0f);
 
             try
@@ -127,6 +128,7 @@ namespace NemoWorld.Harr
                             throw new InvalidDataException("Unsupported op in " + group.id);
                     }
                 }
+                _artAssets.DressSavedBuilding(root, group.id, baseX, baseY, baseZ);
                 _groups++;
             }
         }
@@ -192,6 +194,16 @@ namespace NemoWorld.Harr
             root.SetParent(parent, false);
             root.position = new Vector3(x, y, z);
             if (sprite == "StreetLamp" && AddStreetLampModel(root, y)) return;
+            if (sprite == "BenchWoodWoodland" && _artAssets.PlaceProp(root, "painted_wooden_bench", 1.7f)) return;
+            if ((sprite == "CrateBlock" || sprite.StartsWith("CarpenterCrate")) &&
+                _artAssets.PlaceProp(root, "wooden_crate_01", 0.85f)) return;
+            if ((sprite == "Planter" || sprite.StartsWith("Flowerpot")) &&
+                _artAssets.PlaceProp(root, "planter_pot_clay", 0.72f))
+            {
+                AddProxy(root, PrimitiveType.Sphere, "foliage preview", new Vector3(0f, 0.85f, 0f),
+                    new Vector3(0.85f, 0.9f, 0.85f), new[] { 50, 128, 75 }, "concrete");
+                return;
+            }
             if (sprite.Contains("Lamp") || sprite.Contains("Lantern") || sprite == "Candle")
             {
                 var height = sprite == "Candle" ? 0.55f : 2.6f;
@@ -412,6 +424,7 @@ namespace NemoWorld.Harr
 
         private void OnDestroy()
         {
+            _artAssets.Dispose();
             foreach (var material in _materials.Values) Destroy(material);
         }
     }
