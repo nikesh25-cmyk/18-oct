@@ -6,7 +6,7 @@
 
 **Architecture:** A deterministic exporter reads the pinned authored manifest plus the saved application record on a protected copy, validates IDs and anchors, and emits a public geometry package. Unity imports the package into chunked static meshes and draws residents from authored roster data. A C# service contract owns player position and actions; the first milestone uses a local disposable fixture, not the private live database.
 
-**Tech Stack:** Python 3.9+ standard library for conversion; Unity 6.0.85f1 C#; .NET 8 for future authoritative service.
+**Tech Stack:** Python 3.9+ standard library for conversion; Unity 6.0.85f1 C#; .NET 10 for the authoritative service.
 
 **Spec:** `docs/superpowers/specs/2026-10-18-nemoworld-unity-migration-design.md`
 

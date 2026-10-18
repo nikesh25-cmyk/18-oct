@@ -13,6 +13,9 @@
 Tests/**/bin/
 Tests/**/obj/
 !Tests/**/*.csproj
+service/**/bin/
+service/**/obj/
+!service/**/*.csproj
 __pycache__/
 *.pyc
 .DS_Store

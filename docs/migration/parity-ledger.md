@@ -57,4 +57,4 @@ The installed Veloren world record names **387 applied city groups**, while the 
 
 ## Current completion status
 
-M0 source and database-schema inventory: **done**. Field-level database map: **pending**. Unity parity for every row: **pending**. The existing graybox does not satisfy any row merely by displaying a city or research button.
+M0 source and database-schema inventory: **done**. Field-level database map: **pending**. Unity parity for every row: **pending**. WR-01 now has a tested local C# position fixture (seven checks for save/restart, replay, bounds and isolation), but it does not import real player positions and is not authenticated, so WR-01 remains **S→U**. The existing graybox does not satisfy any row merely by displaying a city or research button.

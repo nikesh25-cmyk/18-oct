@@ -2,11 +2,19 @@
 
 ## Migration in progress
 
+For migration work, clone `codex/nemoworld-unity-migration` from `nikesh25-cmyk/18-oct`. The earlier `codex/agent-district-prototype` branch contains only the editor demo.
+
 The owner has asked to migrate the complete NemoWorld/Harr product from its Veloren implementation to Unity, preserving accounts, saved world state, missions, residents, history and the peaceful mission. This branch records that work. The existing `Main.unity` Agent District demo remains available as an editor and control prototype; it is **not** NemoWorld parity.
 
 Open `Assets/Scenes/HarrPreview.unity` for the first data-driven city preview. Its package contains 362 authored Harr construction groups from a pinned city manifest and the saved placement record. Unity batch import compiled the project and parsed all 362 groups, including coordinate fields. A visual Play-mode walkthrough is still pending because the desktop editor stopped responding during the scene-open check. The preview code renders structural cuboids and cyan placeholders for props; clearing operations, 25 older saved road/light groups, residents, gameplay, persistence and the new C# service are not implemented yet. Do not use it as a replacement for the paused old world.
 
 The [migration design](docs/superpowers/specs/2026-10-18-nemoworld-unity-migration-design.md), [parity ledger](docs/migration/parity-ledger.md), [source inventory](docs/migration/source-inventory.json), and [city export report](docs/migration/city-export-report.json) state exactly what has been accounted for and what remains. The original installation and a private verified backup are kept outside this repository; no private player data is committed here.
+
+### Local C# arrival fixture
+
+The first .NET 10 service slice is in `service/NemoWorld.Service`. It binds only to `127.0.0.1:8776` and stores **disposable fixture positions**, keyed by player and command ID. It rejects nonfinite/out-of-range coordinates and conflicting command replays. Its JSON file is not the preserved NemoWorld database; authentication, account import, missions and economy are not connected. Never expose this fixture service publicly or use real player identifiers with it.
+
+With .NET 10 installed, run its checks with `dotnet run --project Tests/NemoWorld.ServiceChecks`, or start it with `NEMOWORLD_FIXTURE_PATH=/path/to/disposable/arrivals.json dotnet run --project service/NemoWorld.Service`. The endpoints are `GET /health`, `GET /api/v1/players/{playerId}/arrival`, and `POST /api/v1/arrival` with `{ "playerId": "fixture-player", "commandId": "cmd-1", "placeId": "harr", "x": 1.5, "y": 2, "z": -3 }`.
 
 ## Agent District editor demo
 
