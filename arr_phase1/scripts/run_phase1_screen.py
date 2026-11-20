@@ -21,11 +21,13 @@ from pystac_client import Client
 from pyproj import Transformer
 from rasterio import features
 from rasterio.enums import Resampling
-from rasterio.transform import from_origin, array_bounds, xy as transform_xy
+from rasterio.transform import from_origin, array_bounds
 from rasterio.warp import reproject
 from rasterio.windows import from_bounds
 
-ROOT = Path("/workspace/arr_phase1")
+# Repo-relative paths so `python3 arr_phase1/scripts/run_phase1_screen.py` works
+# from any clone (not only /workspace).
+ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
 OUT = ROOT / "outputs"
 OUT.mkdir(parents=True, exist_ok=True)
