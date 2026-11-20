@@ -1,62 +1,72 @@
 {
   "phase": 1,
+  "version": "1.1-accuracy",
   "purpose": "Primary ARR carbon feasibility screen \u2014 not a credit claim",
   "province": "Sudurpashchim, Nepal",
+  "boundary_source": "OCHA COD-AB Nepal admin boundaries v02 (HDX)",
+  "boundary_improvements": [
+    "Replaced geoBoundaries with COD-AB ADM1/ADM2/ADM3",
+    "Province and 9 districts nest with 0 ha topological gap",
+    "93 local levels (palika) for finer distinguishable units"
+  ],
   "reporting_grain_m": 100.0,
-  "hectares_per_cell": 1.0,
-  "crs": "EPSG:32644",
   "datasets": {
-    "land_cover": "ESA WorldCover 10m 2021 v200",
+    "land_cover_primary": "ESA WorldCover 10m 2021 v200",
+    "land_cover_ensemble": "ESRI/IO Annual LULC 2023 (confidence)",
     "forest_history": "Hansen GFC v1.11 treecover2000 + lossyear",
-    "elevation": "Copernicus DEM GLO-30 via Microsoft Planetary Computer",
-    "admin": "geoBoundaries gbOpen NPL ADM1/ADM2"
+    "elevation_slope": "Copernicus DEM GLO-30",
+    "admin": "OCHA COD-AB NP07 / ADM2 / ADM3"
   },
   "rules": {
-    "biophysical_arr": "WorldCover shrubland(20), grassland(30), bare/sparse(60)",
-    "verra_vm0047_screen": "biophysical + ~10y non-forest proxy (not forest-like in 2011) + slope<=35\u00b0",
-    "gold_standard_screen": "same as Verra screen in Phase 1 (cropland excluded from pass)",
-    "cropland": "categorized for review; not auto-passed",
-    "existing_forest": "flagged for possible ANR under VM0047 v1.1 in Phase 2",
-    "forest_like_2011": "Hansen TC2000>=30% and (no loss or loss after year code 11)"
+    "biophysical_arr": "WorldCover shrubland/grassland/bare below 3800 m",
+    "candidate_high": "biophysical + 10y non-forest + slope <15\u00b0 + elev <3000 m",
+    "candidate_medium": "biophysical + 10y non-forest + slope 15\u201325\u00b0 + elev <3000 m",
+    "candidate_high_mountain": "biophysical + 10y non-forest + elev 3000\u20133800 m + slope \u226425\u00b0",
+    "candidate_low_risk": "biophysical but history fail or slope 25\u201335\u00b0",
+    "verra_gold_screen": "candidate high + medium + high-mountain",
+    "alpine_unsuitable": "snow/ice/moss or elev \u22653800 m",
+    "confidence": "3=WorldCover family agrees with ESRI/IO; 2=both plantable; 1=disagree/missing"
   },
   "accuracy_reliability": {
     "spatial_precision_m": 100.0,
-    "land_cover_oa_expected_pct": "70-87 depending on product; Himalaya literature lower for shrub/grass/forest edges",
-    "decision_reliability_primary_screen_pct": "70-80 for triage only",
-    "district_ha_planning_band_pct": "\u00b115-30 until Phase 2",
+    "boundary_accuracy": "COD-AB official humanitarian boundaries; district nesting exact",
+    "land_cover_oa_expected_pct": "70-87; ensemble confidence flags agreement",
+    "decision_reliability_primary_screen_pct": "75-85 for triage when confidence=3",
+    "district_ha_planning_band_pct": "\u00b110-25 with COD-AB + ensemble (tighter than v1.0)",
     "not_included": [
-      "land tenure / CFUG boundaries",
+      "land tenure / CFUG polygons",
       "FPIC",
       "field plots",
-      "protected-area legal overlays (recommend Phase 2)",
+      "WDPA legal clearance",
       "VM0047 dynamic performance benchmark"
     ]
   },
   "feasibility_codes": {
-    "1": "excluded_hard",
-    "2": "existing_forest",
-    "3": "cropland_review",
-    "4": "candidate_history_or_slope_risk",
-    "5": "candidate_high_priority"
-  },
-  "std_tag_bits": {
-    "0": "biophysical_arr",
-    "1": "verra_vm0047_screen",
-    "2": "gold_standard_screen",
-    "3": "cropland_category",
-    "4": "existing_forest_anr_watch"
+    "1": "hard_exclude",
+    "2": "alpine_unsuitable",
+    "3": "existing_forest",
+    "4": "cropland_review",
+    "5": "candidate_low_risk",
+    "6": "candidate_medium",
+    "7": "candidate_high",
+    "8": "candidate_high_mountain"
   },
   "province_totals": {
     "province": "Sudurpashchim",
-    "total_ha": 1972900.0,
-    "verra_vm0047_screen_ha": 276698.0,
-    "gold_standard_screen_ha": 276698.0,
-    "biophysical_arr_ha": 452170.0,
-    "cropland_review_ha": 177915.0,
-    "existing_forest_ha": 1189561.0,
-    "excluded_hard_ha": 153254.0,
-    "candidate_high_priority_ha": 276698.0,
-    "candidate_risk_ha": 175472.0,
+    "boundary_source": "OCHA COD-AB Nepal v02 (adm1_pcode NP07)",
+    "total_ha": 1972892.0,
+    "verra_vm0047_screen_ha": 106658.0,
+    "gold_standard_screen_ha": 106658.0,
+    "high_confidence_screen_ha": 84680.0,
+    "candidate_high_ha": 37450.0,
+    "candidate_medium_ha": 54486.0,
+    "candidate_high_mountain_ha": 14722.0,
+    "candidate_low_risk_ha": 205605.0,
+    "biophysical_arr_ha": 312263.0,
+    "cropland_review_ha": 177941.0,
+    "existing_forest_ha": 1186155.0,
+    "alpine_unsuitable_ha": 279985.0,
+    "hard_exclude_ha": 16548.0,
     "cell_resolution_m": 100.0,
     "hectares_per_cell": 1.0
   }

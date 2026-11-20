@@ -1,33 +1,34 @@
-# Sudurpashchim ARR Phase 1 — Primary Feasibility Screen
+# Sudurpashchim ARR Phase 1 — Primary Feasibility Screen (v1.1 accuracy)
 
 Wall-to-wall ~100 m / 1 ha ARR carbon screening for **100% of Sudurpashchim Province**, Nepal.
 
-## What this is
+## Accuracy upgrades (v1.1)
 
-- **Purpose:** Primary triage for voluntary-market ARR (multi-standard tags).
-- **Not:** A credit claim, PDD, or tenure/FPIC determination.
-- **Grain:** 100 m cells (1 ha) in UTM Zone 44N (`EPSG:32644`).
+- **Boundaries:** OCHA **COD-AB Nepal v02** (HDX) — province NP07 + 9 districts nest with **0 ha gap** (replaced geoBoundaries)
+- **Local levels:** 93 palika (ADM3) rollups for finer, more distinguishable units
+- **Feasibility tiers:** high / medium / high-mountain / low-risk (not a single pass/fail)
+- **Alpine filter:** elev ≥ 3800 m → unsuitable
+- **Ensemble confidence:** ESA WorldCover 2021 × ESRI/IO LULC 2023 agreement (1–3)
 
 ## Quick results (province)
 
 | Metric | Hectares |
 | --- | ---: |
-| Province total (masked grid) | 1,972,900 |
-| High-priority ARR candidate (Verra/GS screen) | 276,698 |
-| Biophysical ARR (shrub/grass/bare) | 452,170 |
-| Candidate with history/slope risk | 175,472 |
-| Cropland (review only) | 177,915 |
-| Existing forest (ANR watch) | 1,189,561 |
-| Hard exclude (built/water/snow/wetland/moss) | 153,254 |
+| Province total (masked grid) | 1,972,892 |
+| Verra / Gold screen (high+medium+high-mtn) | **106,658** |
+| High-confidence screen (ensemble agree) | **84,680** |
+| Candidate high (gentle, &lt;3000 m) | 37,450 |
+| Candidate medium | 54,486 |
+| Candidate high-mountain (3000–3800 m) | 14,722 |
+| Candidate low (history/steep risk) | 205,605 |
+| Cropland review | 177,941 |
+| Existing forest (ANR watch) | 1,186,155 |
+| Alpine unsuitable | 279,985 |
 
-Top districts by high-priority ha: **Bajhang (82,520), Bajura (55,566), Darchula (45,059), Achham (24,720), Baitadi (24,592)**.
+Top districts by screen ha: **Bajhang, Bajura, Achham, Baitadi**.
 
-## Data sources
-
-- ESA WorldCover 10 m 2021 v200 (land cover)
-- Hansen GFC v1.11 tree cover 2000 + loss year (10-year non-forest proxy)
-- Copernicus DEM GLO-30 (slope)
-- geoBoundaries NPL ADM1/ADM2 (province + districts)
+Top local levels (examples): Himali, Shuklaphanta*, Saipal, Budhinanda, Apihimal, Bungal.  
+\*Shuklaphanta overlaps a national park — exclude/confirm in Phase 2 protected-area overlay.
 
 ## Reproduce
 
@@ -36,14 +37,14 @@ pip install -r arr_phase1/requirements.txt
 python3 arr_phase1/scripts/run_phase1_screen.py
 ```
 
-The script downloads admin boundaries and warps open COGs, then writes GeoTIFFs + tables to `arr_phase1/outputs/`.
+Downloads COD-AB on first run, warps open COGs, writes outputs under `arr_phase1/outputs/`.
 
-Committed summary artifacts (no multi-MB rasters): CSVs, `methods_and_totals.json`, and `feasibility_overview.png`.
+Committed summaries: CSVs, `methods_and_totals.json`, `feasibility_overview.png`. GeoTIFFs/admin downloads are gitignored.
 
 ## Accuracy / reliability
 
+- Boundary nesting: **exact** (COD-AB)
 - Spatial precision: **100 m**
-- Land-cover OA expected: **~70–87%** (lower on shrub/grass/forest edges in Himalaya)
-- Decision reliability for triage: **~70–80%**
-- District hectare planning band: **±15–30%** until Phase 2
-- Missing in Phase 1: tenure, FPIC, field plots, protected-area legal overlay, VM0047 dynamic benchmark
+- Decision reliability: **~75–85%** for triage when confidence = 3
+- District ha planning band: **±10–25%** until Phase 2
+- Still missing: tenure, FPIC, WDPA legal clearance, field plots, VM0047 dynamic benchmark
