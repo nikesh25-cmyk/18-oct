@@ -16,3 +16,11 @@ Tests/**/obj/
 __pycache__/
 *.pyc
 .DS_Store
+
+# ARR Phase 1: regenerate heavy rasters/admin downloads locally
+arr_phase1/data/
+arr_phase1/outputs/*.tif
+arr_phase1/outputs/province.geojson
+arr_phase1/outputs/districts.geojson
+arr_phase1/outputs/local_levels.geojson
+arr_phase1/*.zip

@@ -1,0 +1,73 @@
+{
+  "phase": 1,
+  "version": "1.1-accuracy",
+  "purpose": "Primary ARR carbon feasibility screen \u2014 not a credit claim",
+  "province": "Sudurpashchim, Nepal",
+  "boundary_source": "OCHA COD-AB Nepal admin boundaries v02 (HDX)",
+  "boundary_improvements": [
+    "Replaced geoBoundaries with COD-AB ADM1/ADM2/ADM3",
+    "Province and 9 districts nest with 0 ha topological gap",
+    "93 local levels (palika) for finer distinguishable units"
+  ],
+  "reporting_grain_m": 100.0,
+  "datasets": {
+    "land_cover_primary": "ESA WorldCover 10m 2021 v200",
+    "land_cover_ensemble": "ESRI/IO Annual LULC 2023 (confidence)",
+    "forest_history": "Hansen GFC v1.11 treecover2000 + lossyear",
+    "elevation_slope": "Copernicus DEM GLO-30",
+    "admin": "OCHA COD-AB NP07 / ADM2 / ADM3"
+  },
+  "rules": {
+    "biophysical_arr": "WorldCover shrubland/grassland/bare below 3800 m",
+    "candidate_high": "biophysical + 10y non-forest + slope <15\u00b0 + elev <3000 m",
+    "candidate_medium": "biophysical + 10y non-forest + slope 15\u201325\u00b0 + elev <3000 m",
+    "candidate_high_mountain": "biophysical + 10y non-forest + elev 3000\u20133800 m + slope \u226425\u00b0",
+    "candidate_low_risk": "biophysical but history fail or slope 25\u201335\u00b0",
+    "verra_gold_screen": "candidate high + medium + high-mountain",
+    "alpine_unsuitable": "snow/ice/moss or elev \u22653800 m",
+    "confidence": "3=WorldCover family agrees with ESRI/IO; 2=both plantable; 1=disagree/missing"
+  },
+  "accuracy_reliability": {
+    "spatial_precision_m": 100.0,
+    "boundary_accuracy": "COD-AB official humanitarian boundaries; district nesting exact",
+    "land_cover_oa_expected_pct": "70-87; ensemble confidence flags agreement",
+    "decision_reliability_primary_screen_pct": "75-85 for triage when confidence=3",
+    "district_ha_planning_band_pct": "\u00b110-25 with COD-AB + ensemble (tighter than v1.0)",
+    "not_included": [
+      "land tenure / CFUG polygons",
+      "FPIC",
+      "field plots",
+      "WDPA legal clearance",
+      "VM0047 dynamic performance benchmark"
+    ]
+  },
+  "feasibility_codes": {
+    "1": "hard_exclude",
+    "2": "alpine_unsuitable",
+    "3": "existing_forest",
+    "4": "cropland_review",
+    "5": "candidate_low_risk",
+    "6": "candidate_medium",
+    "7": "candidate_high",
+    "8": "candidate_high_mountain"
+  },
+  "province_totals": {
+    "province": "Sudurpashchim",
+    "boundary_source": "OCHA COD-AB Nepal v02 (adm1_pcode NP07)",
+    "total_ha": 1972892.0,
+    "verra_vm0047_screen_ha": 106658.0,
+    "gold_standard_screen_ha": 106658.0,
+    "high_confidence_screen_ha": 84680.0,
+    "candidate_high_ha": 37450.0,
+    "candidate_medium_ha": 54486.0,
+    "candidate_high_mountain_ha": 14722.0,
+    "candidate_low_risk_ha": 205605.0,
+    "biophysical_arr_ha": 312263.0,
+    "cropland_review_ha": 177941.0,
+    "existing_forest_ha": 1186155.0,
+    "alpine_unsuitable_ha": 279985.0,
+    "hard_exclude_ha": 16548.0,
+    "cell_resolution_m": 100.0,
+    "hectares_per_cell": 1.0
+  }
+}

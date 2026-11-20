@@ -1,0 +1,94 @@
+local_id,local_name,district,adm3_pcode
+1,Bannigadhi Jayagadh,Achham,NP0769403
+2,Chaurpati,Achham,NP0769401
+3,Dhakari,Achham,NP0769405
+4,Kamal bazar,Achham,NP0769303
+5,Khaptad,Achham,NP0769597
+6,Mangalsen,Achham,NP0769302
+7,Mellekh,Achham,NP0769402
+8,Panchdebal Binayak,Achham,NP0769304
+9,Ramaroshan,Achham,NP0769404
+10,Sanphebagar,Achham,NP0769301
+11,Turmakhand,Achham,NP0769406
+12,Dasharathchand,Baitadi,NP0774301
+13,Dilasaini,Baitadi,NP0774401
+14,Dogada Kedar,Baitadi,NP0774402
+15,Melauli,Baitadi,NP0774303
+16,Pancheshwor,Baitadi,NP0774404
+17,Patan,Baitadi,NP0774304
+18,Puchaundi,Baitadi,NP0774302
+19,Shivanath,Baitadi,NP0774405
+20,Sigas,Baitadi,NP0774406
+21,Surnaya,Baitadi,NP0774403
+22,Bitthadchir,Bajhang,NP0767404
+23,Bungal,Bajhang,NP0767301
+24,Chhabis Pathibhara,Bajhang,NP0767407
+25,Durgathali,Bajhang,NP0767406
+26,Jayaprithbi,Bajhang,NP0767302
+27,Kedarsyun,Bajhang,NP0767405
+28,Khaptad,Bajhang,NP0767597
+29,Khaptad Chhanna,Bajhang,NP0767410
+30,Masta,Bajhang,NP0767408
+31,Saipal,Bajhang,NP0767401
+32,Surma,Bajhang,NP0767402
+33,Talkot,Bajhang,NP0767403
+34,Thalara,Bajhang,NP0767409
+35,Badimalika,Bajura,NP0768302
+36,Budhiganga,Bajura,NP0768303
+37,Budhinanda,Bajura,NP0768301
+38,Gaumul,Bajura,NP0768402
+39,Himali,Bajura,NP0768401
+40,Jagannath,Bajura,NP0768404
+41,Khaptad,Bajura,NP0768597
+42,Khaptad Chhededaha,Bajura,NP0768403
+43,Swamikartik Khapar,Bajura,NP0768405
+44,Tribeni,Bajura,NP0768304
+45,Aalital,Dadeldhura,NP0773404
+46,Ajayameru,Dadeldhura,NP0773402
+47,Amargadhi,Dadeldhura,NP0773302
+48,Bhageshwor,Dadeldhura,NP0773401
+49,Ganyapdhura,Dadeldhura,NP0773405
+50,Nawadurga,Dadeldhura,NP0773403
+51,Parashuram,Dadeldhura,NP0773301
+52,Apihimal,Darchula,NP0775403
+53,Byas,Darchula,NP0775401
+54,Duhun,Darchula,NP0775402
+55,Lekam,Darchula,NP0775406
+56,Mahakali,Darchula,NP0775301
+57,Malikarjun,Darchula,NP0775404
+58,Marma,Darchula,NP0775407
+59,Naugad,Darchula,NP0775405
+60,Shailyashikhar,Darchula,NP0775302
+61,Aadarsha,Doti,NP0770401
+62,Badi Kedar,Doti,NP0770406
+63,Bogatan Phudsil,Doti,NP0770407
+64,Dipayal Silgadhi,Doti,NP0770302
+65,Jorayal,Doti,NP0770404
+66,K.I. Singh,Doti,NP0770405
+67,Khaptad,Doti,NP0770597
+68,Purbichouki,Doti,NP0770403
+69,Sayal,Doti,NP0770402
+70,Shikhar,Doti,NP0770301
+71,Bardagoriya,Kailali,NP0771405
+72,Bhajani,Kailali,NP0771304
+73,Chure,Kailali,NP0771401
+74,Dhangadhi,Kailali,NP0771201
+75,Gauriganga,Kailali,NP0771302
+76,Ghodaghodi,Kailali,NP0771303
+77,Godawari,Kailali,NP0771301
+78,Janaki,Kailali,NP0771406
+79,Joshipur,Kailali,NP0771404
+80,Kailari,Kailali,NP0771402
+81,Lamki Chuha,Kailali,NP0771306
+82,Mohanyal,Kailali,NP0771403
+83,Tikapur,Kailali,NP0771305
+84,Bedkot,Kanchanpur,NP0772303
+85,Beldandi,Kanchanpur,NP0772401
+86,Belouri,Kanchanpur,NP0772306
+87,Bhimdatta,Kanchanpur,NP0772302
+88,Dodhara Chandani,Kanchanpur,NP0772301
+89,Krishnapur,Kanchanpur,NP0772305
+90,Laljhadi,Kanchanpur,NP0772402
+91,Punarbas,Kanchanpur,NP0772307
+92,Shuklaphanta,Kanchanpur,NP0772304
+93,Shuklaphanta,Kanchanpur,NP0772597
