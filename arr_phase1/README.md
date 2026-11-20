@@ -32,11 +32,13 @@ Top districts by high-priority ha: **Bajhang (82,520), Bajura (55,566), Darchula
 ## Reproduce
 
 ```bash
-pip install geopandas rasterio shapely pyproj pandas numpy matplotlib planetary-computer pystac-client
+pip install -r arr_phase1/requirements.txt
 python3 arr_phase1/scripts/run_phase1_screen.py
 ```
 
-Outputs land in `arr_phase1/outputs/`.
+The script downloads admin boundaries and warps open COGs, then writes GeoTIFFs + tables to `arr_phase1/outputs/`.
+
+Committed summary artifacts (no multi-MB rasters): CSVs, `methods_and_totals.json`, and `feasibility_overview.png`.
 
 ## Accuracy / reliability
 
