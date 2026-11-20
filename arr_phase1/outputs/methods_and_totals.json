@@ -1,0 +1,63 @@
+{
+  "phase": 1,
+  "purpose": "Primary ARR carbon feasibility screen \u2014 not a credit claim",
+  "province": "Sudurpashchim, Nepal",
+  "reporting_grain_m": 100.0,
+  "hectares_per_cell": 1.0,
+  "crs": "EPSG:32644",
+  "datasets": {
+    "land_cover": "ESA WorldCover 10m 2021 v200",
+    "forest_history": "Hansen GFC v1.11 treecover2000 + lossyear",
+    "elevation": "Copernicus DEM GLO-30 via Microsoft Planetary Computer",
+    "admin": "geoBoundaries gbOpen NPL ADM1/ADM2"
+  },
+  "rules": {
+    "biophysical_arr": "WorldCover shrubland(20), grassland(30), bare/sparse(60)",
+    "verra_vm0047_screen": "biophysical + ~10y non-forest proxy (not forest-like in 2011) + slope<=35\u00b0",
+    "gold_standard_screen": "same as Verra screen in Phase 1 (cropland excluded from pass)",
+    "cropland": "categorized for review; not auto-passed",
+    "existing_forest": "flagged for possible ANR under VM0047 v1.1 in Phase 2",
+    "forest_like_2011": "Hansen TC2000>=30% and (no loss or loss after year code 11)"
+  },
+  "accuracy_reliability": {
+    "spatial_precision_m": 100.0,
+    "land_cover_oa_expected_pct": "70-87 depending on product; Himalaya literature lower for shrub/grass/forest edges",
+    "decision_reliability_primary_screen_pct": "70-80 for triage only",
+    "district_ha_planning_band_pct": "\u00b115-30 until Phase 2",
+    "not_included": [
+      "land tenure / CFUG boundaries",
+      "FPIC",
+      "field plots",
+      "protected-area legal overlays (recommend Phase 2)",
+      "VM0047 dynamic performance benchmark"
+    ]
+  },
+  "feasibility_codes": {
+    "1": "excluded_hard",
+    "2": "existing_forest",
+    "3": "cropland_review",
+    "4": "candidate_history_or_slope_risk",
+    "5": "candidate_high_priority"
+  },
+  "std_tag_bits": {
+    "0": "biophysical_arr",
+    "1": "verra_vm0047_screen",
+    "2": "gold_standard_screen",
+    "3": "cropland_category",
+    "4": "existing_forest_anr_watch"
+  },
+  "province_totals": {
+    "province": "Sudurpashchim",
+    "total_ha": 1972900.0,
+    "verra_vm0047_screen_ha": 276698.0,
+    "gold_standard_screen_ha": 276698.0,
+    "biophysical_arr_ha": 452170.0,
+    "cropland_review_ha": 177915.0,
+    "existing_forest_ha": 1189561.0,
+    "excluded_hard_ha": 153254.0,
+    "candidate_high_priority_ha": 276698.0,
+    "candidate_risk_ha": 175472.0,
+    "cell_resolution_m": 100.0,
+    "hectares_per_cell": 1.0
+  }
+}
